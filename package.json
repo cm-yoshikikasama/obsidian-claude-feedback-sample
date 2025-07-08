@@ -1,0 +1,16 @@
+{
+  "name": "obsidian-claude-feedback-sample",
+  "version": "1.0.0",
+  "description": "日本語と英語で整理されたマークダウンノートを含む個人のObsidianボルトです。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"**/*.md\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
