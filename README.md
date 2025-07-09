@@ -98,14 +98,14 @@ uv pip install -r requirements.txt
 ```env
 PROJECT_ID=your-gcp-project-id
 REGION=your-region
-FILE_NAME=audio
+FILE_NAME=audio.mp3
 GOOGLE_APPLICATION_CREDENTIALS=path/to/your/service-account-key.json
 ```
 
 ### 使用方法
 
 1. `audio_video_to_text/input/` フォルダに変換したい MP3 または MP4 ファイルを配置
-2. `.env` ファイルの `FILE_NAME` をファイル名（拡張子なし）に設定
+2. `.env` ファイルの `FILE_NAME` をファイル名（拡張子あり）に設定
 3. 仮想環境が有効化されていることを確認してスクリプトを実行:
 
 ```bash
