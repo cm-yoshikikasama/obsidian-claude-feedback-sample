@@ -32,15 +32,10 @@
       "Glob(./**)",
       "LS(./**)",
       "Write(./**)",
-      "Write(!.git/**)",
-      "Write(!.terraform/**)",
-      "Write(!terraform.tfstate*)",
-      "Write(!*.tfvars)",
       "MultiEdit(./**)",
       "TodoRead(**)",
       "TodoWrite(**)",
-      "Task(**)",
-      "Bash(cp:*)"
+      "Task(**)"
     ],
     "deny": [
       "Bash(rm -rf*)",
@@ -50,7 +45,8 @@
       "Bash(mv /* *)",
       "Bash(mv * /*)",
       "Bash(mkdir /*)",
-      "Bash(sudo*)"
+      "Bash(sudo*)",
+      "Write(.git/**)"
     ]
   },
   "enabledMcpjsonServers": [
