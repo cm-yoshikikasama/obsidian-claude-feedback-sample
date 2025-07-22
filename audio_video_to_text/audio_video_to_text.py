@@ -14,7 +14,7 @@ PROJECT_ID = os.getenv("PROJECT_ID")
 REGION = os.getenv("REGION")
 FILE_NAME = os.getenv("FILE_NAME")  # 例: "meeting_audio.mp4" または "meeting_audio.mp3"
 OUTPUT_DIR = "output"  # 出力先
-MODEL_NAME = "gemini-2.5-pro-preview-03-25"
+MODEL_NAME = "gemini-2.5-pro"
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_APPLICATION_CREDENTIALS
 
