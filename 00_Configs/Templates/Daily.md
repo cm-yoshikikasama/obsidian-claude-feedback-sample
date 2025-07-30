@@ -1,3 +1,10 @@
+---
+tags:
+    - A_project
+    - B_project
+    - C_project
+---
+
 # {{date}}
 
 ## MTG・イベント
