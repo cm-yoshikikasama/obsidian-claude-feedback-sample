@@ -17,7 +17,7 @@ argument-hint: YYYY-MM-DD
 
 ```bash
 ls .claude/audio_video_to_text/input/
-cd .claude/audio_video_to_text && source ../.venv/bin/activate && python audio_video_to_text.py
+cd .claude/audio_video_to_text && uv run audio_video_to_text.py
 ```
 
 ### Step 2: Read Latest Transcript

@@ -47,10 +47,9 @@
 
 ### 2. 音声・動画文字起こし
 
-1. `.claude`ディレクトリで`source .venv/bin/activate`で仮想環境を有効化
-2. 音声・動画ファイルを`.claude/audio_video_to_text/input/`に配置
-3. `.env`ファイルで`FILE_NAME`を設定
-4. `python audio_video_to_text/audio_video_to_text.py`で実行
+1. 音声・動画ファイルを`.claude/audio_video_to_text/input/`に配置
+2. `.env`ファイルで`FILE_NAME`を設定
+3. `uv run audio_video_to_text/audio_video_to_text.py`で実行
 
 ### 3. Claude Codeカスタムコマンド
 
@@ -61,7 +60,7 @@
 
 ## セットアップ
 
-### 仮想環境の初期化
+### 依存関係のインストール
 
 ```bash
 cd .claude
@@ -91,22 +90,15 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-#### 2. 仮想環境の作成と依存関係のインストール
+#### 2. 依存関係のインストール
 
 ```bash
 # プロジェクトのルートディレクトリに移動
 cd .claude
 
-# 仮想環境作成（Python 3.13を自動インストール）
+# 仮想環境作成とPython 3.13インストール
 uv venv --python 3.13
-
-# 仮想環境の有効化
-# macOS/Linux
-source .venv/bin/activate
-# Windows
-.venv\Scripts\activate
-
-# 依存関係のインストール
+source .venv/bin/activate  # macOS/Linux
 uv pip install -r requirements.txt
 ```
 
@@ -125,12 +117,11 @@ GOOGLE_APPLICATION_CREDENTIALS=path/to/your/service-account-key.json
 
 1. `.claude/audio_video_to_text/input/` フォルダに変換したい MP3 または MP4 ファイルを配置
 2. `.env` ファイルの `FILE_NAME` をファイル名（拡張子なし）に設定
-3. 仮想環境が有効化されていることを確認してスクリプトを実行:
+3. スクリプトを実行:
 
 ```bash
 cd .claude
-source .venv/bin/activate  # 仮想環境を有効化
-python audio_video_to_text/audio_video_to_text.py
+uv run audio_video_to_text/audio_video_to_text.py
 ```
 
 変換されたテキストは `.claude/audio_video_to_text/output/` フォルダに保存されます。
@@ -159,7 +150,7 @@ python audio_video_to_text/audio_video_to_text.py
 - Vertex AI の使用には課金が発生する可能性があります
 - MP4ファイルの変換にはFFmpegが必要です
 - 大きなファイルの場合、処理に時間がかかる場合があります
-- 実行前に仮想環境が有効化されていることを確認してください
+- `uv run`コマンドが自動で仮想環境を管理します
 
 ## 開発環境のセットアップ
 
@@ -208,15 +199,9 @@ Google Calendar APIを使用して今日の予定を取得するPythonスクリ�
 
 ### セットアップ
 
-#### 1. 統合された仮想環境を使用
+#### 1. uvを使用した実行
 
-`.claude`ディレクトリの統合された仮想環境を使用します：
-
-```bash
-cd .claude
-source .venv/bin/activate  # macOS/Linux
-# または .venv\Scripts\activate  # Windows
-```
+`.claude`ディレクトリで`uv run`を使用します：
 
 #### 2. Google Cloud Console設定
 
@@ -259,8 +244,7 @@ source .venv/bin/activate  # macOS/Linux
 
 ```bash
 cd .claude
-source .venv/bin/activate  # 仮想環境を有効化
-python today_cal/today-calendar.py
+uv run today_cal/today-calendar.py
 ```
 
 初回実行時：
@@ -277,8 +261,7 @@ python today_cal/today-calendar.py
 ```bash
 # 今日の予定を表示
 cd .claude
-source .venv/bin/activate  # 仮想環境を有効化
-python today_cal/today-calendar.py
+uv run today_cal/today-calendar.py
 ```
 
 出力例：

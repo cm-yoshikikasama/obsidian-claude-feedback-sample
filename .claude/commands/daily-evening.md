@@ -23,7 +23,7 @@ PROJECT_C = "Cプロジェクト"
 ### Step 1: Get Calendar Events
 
 ```bash
-cd .claude && source .venv/bin/activate && python today_cal/today-calendar.py
+cd .claude && uv run today_cal/today-calendar.py
 ```
 
 Parse calendar output to understand today's events and generate relevant questions.
