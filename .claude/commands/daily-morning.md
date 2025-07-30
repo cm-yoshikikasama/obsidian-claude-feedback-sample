@@ -32,10 +32,22 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 
 - Find latest daily note in `01_Daily/`
 - Extract "明日やる" section content
+- If no previous daily note exists, skip to Step 3B
 
-### Step 3: User Confirmation
+### Step 3A: User Confirmation (when previous tasks exist)
 
 Show previous tasks and ask: "今日のTodoに修正や追加はありますか？修正がある場合は具体的に教えてください。修正がなければ「そのまま」とお答えください。"
+
+### Step 3B: User Input (when no previous tasks exist)
+
+Ask user for today's todos by project:
+"前回のdaily noteがないため、今日の各プロジェクトの予定を教えてください：
+
+- Aプロジェクト:
+- Bプロジェクト:
+- Cプロジェクト:
+- ブログ:
+- その他: "
 
 ### Step 4: Create Daily Note
 
