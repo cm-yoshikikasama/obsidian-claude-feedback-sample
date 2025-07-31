@@ -38,15 +38,34 @@ npm run format
 ### Audio/Video Transcription
 
 ```bash
-# Setup Python environment (using uv)
-cd audio_video_to_text
+# Setup and run from project root using uv
+cd .claude
+uv run audio_video_to_text/audio_video_to_text.py
+
+# Alternative: Traditional setup (if needed)
+cd .claude
 uv venv --python 3.13
 source .venv/bin/activate  # macOS/Linux
 uv pip install -r requirements.txt
-
-# Run transcription (requires .env file with GCP credentials)
-python audio_video_to_text.py
+python audio_video_to_text/audio_video_to_text.py
 ```
+
+### Google Calendar Integration
+
+```bash
+# Get today's calendar events
+cd .claude
+uv run today_cal/today-calendar.py
+```
+
+### Custom Slash Commands
+
+The project includes several slash commands in `.claude/commands/`:
+
+- `/daily-morning`: Create morning daily note with calendar events and previous day's tasks
+- `/daily-evening`: Update evening daily note with reflections and tomorrow's planning  
+- `/english-lesson [date]`: Generate English lesson feedback from audio transcription
+- `/meeting-minutes [date]`: Generate meeting minutes from audio transcription
 
 ## Architecture Details
 
@@ -78,20 +97,34 @@ Daily notes follow a consistent todo categorization:
 ### Claude Code Settings
 
 - Auto-formatting hooks configured in `.claude/settings.json`
-- Prettier formatting applied to all markdown files after edits
-- Custom permissions and security settings defined
+- Prettier formatting applied to all markdown files after Write/Edit/MultiEdit operations
+- Custom permissions limiting file system access to current directory only
+- Notification and completion sound hooks configured (macOS Funk.aiff)
+- Telemetry disabled for privacy
 
 ### Dependencies
 
-- **Node.js**: For Prettier markdown formatting
-- **Python 3.13**: For audio transcription tool
-- **uv**: Python package manager and virtual environment tool
-- **FFmpeg**: Required for MP4 to MP3 conversion
-- **Google Cloud Platform**: Vertex AI API access required
+- **Node.js**: For Prettier markdown formatting (`npm run format`)
+- **Python 3.13**: For AI transcription and calendar integration
+- **uv**: Python package manager and virtual environment tool (preferred over pip/venv)
+- **FFmpeg**: Required for MP4 to MP3 conversion in transcription pipeline
+- **Google Cloud Platform**: Vertex AI API access for transcription
+- **Google Calendar API**: OAuth2 credentials required for calendar integration
+
+### Python Dependencies (`.claude/requirements.txt`)
+
+Audio/Video transcription:
+- `vertexai`: Google's AI platform for transcription
+- `python-dotenv`: Environment variable management
+- `ffmpeg-python`: Video to audio conversion
+
+Google Calendar integration:
+- `google-auth`, `google-auth-oauthlib`, `google-auth-httplib2`: OAuth2 authentication
+- `google-api-python-client`: Calendar API client
 
 ### Environment Setup
 
-Audio transcription requires `.env` file in `audio_video_to_text/`:
+Audio transcription requires `.env` file in `.claude/audio_video_to_text/`:
 
 ```env
 PROJECT_ID=your-gcp-project-id
@@ -99,6 +132,10 @@ REGION=your-region
 FILE_NAME=audio  # filename without extension
 GOOGLE_APPLICATION_CREDENTIALS=path/to/service-account-key.json
 ```
+
+Google Calendar integration requires OAuth2 setup:
+- `cal_client_secret.json` in `.claude/` directory
+- First run will create `token.json` automatically
 
 ## Working with This Repository
 
