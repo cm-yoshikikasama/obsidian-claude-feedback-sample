@@ -2,7 +2,7 @@
   "env": {
     "TF_LOG": "WARN",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
-    "BASH_DEFAULT_TIMEOUT_MS": "120000"
+    "BASH_DEFAULT_TIMEOUT_MS": "600000"
   },
   "permissions": {
     "allow": [
