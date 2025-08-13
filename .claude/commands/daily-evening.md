@@ -30,7 +30,7 @@ Parse calendar output to understand today's events and generate relevant questio
 
 ### Step 2: Find Today's Daily Note
 
-- Locate today's daily note in `01_Daily/[YYYY-MM-DD].md` format
+- Locate today's daily note in `01_Daily/YYYY/MM/[YYYY-MM-DD].md` format
 - Read the file to understand current content structure
 
 ### Step 3: Ask User Questions with Calendar Context (一つずつ質問)
@@ -67,7 +67,7 @@ Google Calendarから、その他の予定で以下がありました：
 
 After collecting all responses, update the daily note file:
 
-1. Read `01_Daily/[date].md` file
+1. Read `01_Daily/YYYY/MM/[date].md` file
 2. Update MTG・イベント section:
     - Mark ALL Google Calendar events as `- [x]` (attended)
     - For events that exist in daily note but NOT in Google Calendar, mark with strikethrough: `- [ ] ~~event name~~ (実施せず)`

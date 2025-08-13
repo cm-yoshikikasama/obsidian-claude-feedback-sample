@@ -30,7 +30,7 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 
 ### Step 2: Get Previous Tasks
 
-- Find latest daily note in `01_Daily/`
+- Find latest daily note in `01_Daily/YYYY/MM/` directory structure
 - Extract "明日やる" section content
 - If no previous daily note exists, skip to Step 3B
 
@@ -51,7 +51,7 @@ Ask user for today's todos by project:
 
 ### Step 4: Create Daily Note
 
-Create `01_Daily/[今日の日付].md`:
+Create `01_Daily/YYYY/MM/[今日の日付].md`:
 
 ```markdown
 ---
