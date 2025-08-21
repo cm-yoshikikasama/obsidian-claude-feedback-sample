@@ -36,7 +36,7 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 
 ### Step 3A: User Confirmation (when previous tasks exist)
 
-Show previous tasks and ask: "今日のTodoに修正や追加はありますか？修正がある場合は具体的に教えてください。修正がなければ「そのまま」とお答えください。"
+Show previous tasks and ask: "今日のTodoに修正や追加はありますか？修正がある場合は具体的に教えてください。修正がなければ「なし」とお答えください。"
 
 ### Step 3B: User Input (when no previous tasks exist)
 
