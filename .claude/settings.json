@@ -37,7 +37,8 @@
       "MultiEdit(./**)",
       "TodoRead(**)",
       "TodoWrite(**)",
-      "Task(**)"
+      "Task(**)",
+      "Bash(uv run:*)"
     ],
     "deny": [
       "Bash(rm -rf*)",
