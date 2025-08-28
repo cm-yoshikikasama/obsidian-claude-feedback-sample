@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Write, Read, Glob, Edit
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Write, Read, Glob, Edit, LS
 description: Update daily note with today's achievements and tomorrow's plan
 ---
 

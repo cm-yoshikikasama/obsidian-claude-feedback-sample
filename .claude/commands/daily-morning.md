@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Write, Read, Glob
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Write, Read, Glob, LS
 description: Create daily note from calendar events and previous day's tasks
 ---
 
