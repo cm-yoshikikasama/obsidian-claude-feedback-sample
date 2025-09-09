@@ -30,8 +30,10 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 
 ### Step 2: Get Previous Tasks
 
-- Find latest daily note in `01_Daily/YYYY/MM/` directory structure
-- Extract "明日やる" section content
+- Use Glob tool with `path=".."` and `pattern="01_Daily/**/*.md"` to find daily notes
+- This pattern matches all markdown files in the 01_Daily directory structure
+- Sort the results to get the most recent file
+- Read the latest daily note and extract "明日やる" section content
 - If no previous daily note exists, skip to Step 3B
 
 ### Step 3A: User Confirmation (when previous tasks exist)
