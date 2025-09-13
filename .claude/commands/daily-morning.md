@@ -1,13 +1,20 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Write, Read, Glob, LS
-description: Create daily note from calendar events and previous day's tasks
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Bash(date:*), Write, Read, Glob, LS
+argument-hint: [YYYY-MM-DD]
+description: Create daily note from calendar events and previous tasks (optional: specific date)
 ---
 
 # Daily Note Morning Assistant（朝用・作成）
 
+## Date Handling
+
+- If date argument ($1) is provided in YYYY-MM-DD format, use that date
+- If no argument provided, use today's date (JST)
+- Target date: ${TARGET_DATE}
+
 ## Project Configuration
 
-```
+```txt
 PROJECT_A = "Aプロジェクト"
 PROJECT_B = "Bプロジェクト"
 PROJECT_C = "Cプロジェクト"
@@ -15,15 +22,27 @@ PROJECT_C = "Cプロジェクト"
 
 ## Your task
 
-1. Get Google Calendar events and add to MTG・イベント section
-2. Get previous day's todo from latest daily note
-3. Ask user for todo updates
-4. Create today's daily note file
+1. Determine target date from argument or use today
+2. Get Google Calendar events and add to MTG・イベント section
+3. Get previous day's todo from latest daily note
+4. Ask user for todo updates
+5. Create target date's daily note file
+
+### Step 0: Determine Target Date
+
+```bash
+TARGET_DATE="$1"
+if [ -z "$TARGET_DATE" ]; then
+  # Explicitly use JST timezone
+  TARGET_DATE=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+fi
+echo "Creating daily note for: $TARGET_DATE"
+```
 
 ### Step 1: Get Calendar Events
 
 ```bash
-cd .claude && uv run today_cal/today-calendar.py
+cd .claude && uv run today_cal/today-calendar.py --date "$TARGET_DATE"
 ```
 
 Parse calendar output and convert each event to checkbox format for MTG・イベント section.
@@ -53,7 +72,7 @@ Ask user for today's todos by project:
 
 ### Step 4: Create Daily Note
 
-Create `01_Daily/YYYY/MM/[今日の日付].md`:
+Create `01_Daily/YYYY/MM/[TARGET_DATE].md`:
 
 ```markdown
 ---
@@ -63,7 +82,7 @@ tags:
     - { PROJECT_C }
 ---
 
-# Daily [今日の日付]
+# Daily [TARGET_DATE]
 
 ## MTG・イベント
 

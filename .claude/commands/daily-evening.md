@@ -1,13 +1,20 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Write, Read, Glob, Edit, LS
-description: Update daily note with today's achievements and tomorrow's plan
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Bash(date:*), Write, Read, Glob, Edit, LS
+argument-hint: [YYYY-MM-DD]
+description: Update daily note with achievements and tomorrow's plan (optional: specific date)
 ---
 
 # Daily Note Evening Assistant（夜用・更新）
 
+## Date Handling
+
+- If date argument ($1) is provided in YYYY-MM-DD format, use that date
+- If no argument provided, use today's date (JST)
+- Target date: ${TARGET_DATE}
+
 ## Project Configuration
 
-```
+```txt
 PROJECT_A = "Aプロジェクト"
 PROJECT_B = "Bプロジェクト"
 PROJECT_C = "Cプロジェクト"
@@ -15,22 +22,34 @@ PROJECT_C = "Cプロジェクト"
 
 ## Your task
 
-1. Get Google Calendar events for today
-2. Find and read today's daily note
-3. Ask user 6 questions one by one about achievements and reflection
-4. Update the existing daily note file with responses
+1. Determine target date from argument or use today
+2. Get Google Calendar events for target date
+3. Find and read target date's daily note
+4. Ask user 6 questions one by one about achievements and reflection
+5. Update the existing daily note file with responses
+
+### Step 0: Determine Target Date
+
+```bash
+TARGET_DATE="$1"
+if [ -z "$TARGET_DATE" ]; then
+  # Explicitly use JST timezone
+  TARGET_DATE=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+fi
+echo "Processing daily note for: $TARGET_DATE"
+```
 
 ### Step 1: Get Calendar Events
 
 ```bash
-cd .claude && uv run today_cal/today-calendar.py
+cd .claude && uv run today_cal/today-calendar.py --date "$TARGET_DATE"
 ```
 
-Parse calendar output to understand today's events and generate relevant questions.
+Parse calendar output to understand the target date's events and generate relevant questions.
 
-### Step 2: Find Today's Daily Note
+### Step 2: Find Target Date's Daily Note
 
-- Locate today's daily note in `01_Daily/YYYY/MM/[YYYY-MM-DD].md` format
+- Locate the daily note in `01_Daily/YYYY/MM/[TARGET_DATE].md` format
 - Read the file to understand current content structure
 
 ### Step 3: Ask User Questions with Calendar Context (一つずつ質問)
@@ -67,7 +86,7 @@ Google Calendarから、その他の予定で以下がありました：
 
 After collecting all responses, update the daily note file:
 
-1. Read `01_Daily/YYYY/MM/[date].md` file
+1. Read `01_Daily/YYYY/MM/[TARGET_DATE].md` file
 2. Update MTG・イベント section:
     - Mark ALL Google Calendar events as `- [x]` (attended)
     - For events that exist in daily note but NOT in Google Calendar, mark with strikethrough: `- [ ] ~~event name~~ (実施せず)`
