@@ -14,7 +14,7 @@ This is a personal Obsidian vault containing organized markdown notes in Japanes
 - **01_Daily/**: Daily notes and logs
 - **02_Weekly/**: Weekly summaries and AI reviews
 - **03_RoughNotes/**: Temporary notes and rough materials
-- **04_eng_study/**: English study materials and lesson feedback
+- **04_EngStudy/**: English study materials and lesson feedback
 - **05_Meetings/**: Meeting notes and minutes
 - **06_Clippings/**: Web clippings and saved articles
 
