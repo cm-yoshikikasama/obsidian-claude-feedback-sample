@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Bash(date:*), Write, Read, Glob, Edit, LS
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(date:*), Bash(TZ=*), Bash(uv:*), Write, Read, Glob, Edit, LS
 argument-hint: [YYYY-MM-DD]
 description: Update daily note with achievements and tomorrow's plan (optional: specific date)
 ---
@@ -56,25 +56,45 @@ Parse calendar output to understand the target date's events and generate releva
 
 First, analyze the Google Calendar events and match them to projects. Then ask these questions one by one, incorporating calendar information. Wait for each response before proceeding:
 
-**質問1: {PROJECT_A}の実績**
+**質問1: {PROJECT_A}のタスク進捗**
 Google Calendarから、{PROJECT_A}関連で以下の予定がありました：
 [カレンダーの該当イベントをリスト表示]
-この作業を実施しましたね。他に追記することがあれば教えてください。なければ「なし」とお答えください。
 
-**質問2: {PROJECT_B}の実績**
+デイリーノートの{PROJECT_A}タスクについて、すべてのタスクの進捗状況を一括で教えてください：
+[既存のタスクをすべて表示]
+
+各タスクについて「未着手」「進行中」「レビュー中」「完了」「中止」のどれかと、詳細状況を教えてください。
+他に今日やったタスクがあれば追記してください。
+
+**質問2: {PROJECT_B}のタスク進捗**
 Google Calendarから、{PROJECT_B}関連で以下の予定がありました：
 [カレンダーの該当イベントをリスト表示]
-この作業を実施しましたね。他に追記することがあれば教えてください。なければ「なし」とお答えください。
 
-**質問3: {PROJECT_C}の実績**
+デイリーノートの{PROJECT_B}タスクについて、すべてのタスクの進捗状況を一括で教えてください：
+[既存のタスクをすべて表示]
+
+各タスクについて「未着手」「進行中」「レビュー中」「完了」「中止」のどれかと、詳細状況を教えてください。
+他に今日やったタスクがあれば追記してください。
+
+**質問3: {PROJECT_C}のタスク進捗**
 Google Calendarから、{PROJECT_C}関連で以下の予定がありました：
 [カレンダーの該当イベントをリスト表示]
-この作業を実施しましたね。他に追記することがあれば教えてください。なければ「なし」とお答えください。
 
-**質問4: ブログ・その他の実績**
+デイリーノートの{PROJECT_C}タスクについて、すべてのタスクの進捗状況を一括で教えてください：
+[既存のタスクをすべて表示]
+
+各タスクについて「未着手」「進行中」「レビュー中」「完了」「中止」のどれかと、詳細状況を教えてください。
+他に今日やったタスクがあれば追記してください。
+
+**質問4: ブログ・その他のタスク進捗**
 Google Calendarから、その他の予定で以下がありました：
 [カレンダーの該当イベントをリスト表示]
-ブログやその他の活動で今日やったことがあれば教えてください。カレンダー以外の活動も含めてお答えください。なければ「なし」とお答えください。
+
+デイリーノートのブログ・その他のタスクについて、すべてのタスクの進捗状況を一括で教えてください：
+[既存のタスクをすべて表示]
+
+各タスクについて「未着手」「進行中」「レビュー中」「完了」「中止」のどれかと、詳細状況を教えてください。
+カレンダー以外で今日やった活動があれば追記してください。
 
 **質問5: 今日の振り返り**
 今日1日を振り返って、感謝したこと、よかったこと・うまくいかなかったことなどを自由に話してください。
@@ -92,8 +112,11 @@ After collecting all responses, update the daily note file:
     - For events that exist in daily note but NOT in Google Calendar, mark with strikethrough: `- [ ] ~~event name~~ (実施せず)`
 3. Update 今日のTodo section:
     - Mark completed items as `- [x]`
+    - Update in-progress items as `- [/]`
+    - Mark items under review as `- [R]`
+    - Mark cancelled items as `- [-]`
+    - Keep pending items as `- [ ]`
     - Update progress details (e.g., "実装進める" → "実装80%完了、動作検証に移行")
-    - Keep incomplete items as `- [ ]`
 4. Update 今日の振り返り section:
     - 感謝: Add user responses as bullet points
     - Good: Add user responses as bullet points
@@ -117,13 +140,16 @@ After collecting all responses, update the daily note file:
 ## 今日のTodo
 
 - Aプロジェクト
-    - [x] 実装80%完了、動作検証に移行 # 進捗を具体的に更新
+    - [x] 実装80%完了、動作検証に移行 # 完了
+    - [/] APIテスト進行中 # 進行中
 - Bプロジェクト
-    - [x] 単体テスト完了、結合テスト開始 # 進捗を具体的に更新
+    - [x] 単体テスト完了、結合テスト開始 # 完了
+    - [R] コードレビュー待ち # レビュー中
 - Cプロジェクト
-    - [x] アーキテクチャ検討完了、構成図作成中 # 進捗を具体的に更新
+    - [x] アーキテクチャ検討完了、構成図作成中 # 完了
+    - [-] 会議が中止になったため延期 # 中止
 - ブログ
-    - [ ] （予定なし） # 実施しなかった場合はそのまま
+    - [ ] （予定なし） # 未着手
 - その他
     - [ ] （予定なし）
 

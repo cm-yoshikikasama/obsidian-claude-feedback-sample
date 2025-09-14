@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Bash(date:*), Write, Read, Glob, LS
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(date:*), Bash(TZ=*), Bash(uv:*), Write, Read, Glob, LS
 argument-hint: [YYYY-MM-DD]
 description: Create daily note from calendar events and previous tasks (optional: specific date)
 ---
@@ -53,6 +53,7 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 - This pattern matches all markdown files in the 01_Daily directory structure
 - Sort the results to get the most recent file
 - Read the latest daily note and extract "明日やる" section content
+- Note: Tasks use these statuses: [ ] 未着手, [/] 進行中, [R] レビュー中, [x] 完了, [-] 中止
 - If no previous daily note exists, skip to Step 3B
 
 ### Step 3A: User Confirmation (when previous tasks exist)
