@@ -9,6 +9,7 @@
 - **Google Calendar連携**: 今日の予定取得ツール
 - **議事録自動生成**: 音声ファイルから議事録を自動作成
 - **マークダウンフォーマット**: Prettierを使用したファイル統一フォーマット
+- **Obsidian Base プラグイン**: データベースライクなビュー管理（Base.base設定ファイル）
 
 ## ディレクトリ構造
 
@@ -17,9 +18,11 @@
 │   ├── Extra/            # 追加設定
 │   └── Templates/        # Obsidianテンプレート（Daily.md等）
 ├── 01_Daily/             # 日次ノート・デイリーログ
-├── 02_Inbox/             # 一時ノート・リサーチ資料
+├── 02_RoughNotes/        # ラフメモ・一時的なノート
 ├── 03_eng_study/         # 英語学習資料・フィードバック
 ├── 04_Meetings/          # 会議ノート・議事録
+├── 07_Clippings/         # ウェブクリッピング・保存記事
+├── Base.base             # Obsidian Base プラグイン設定
 ├── CLAUDE.md             # Claude Code 設定・プロジェクト指示
 ├── README.md             # このファイル
 ├── package.json          # Node.js依存関係（Prettier）
@@ -32,7 +35,8 @@
     │   ├── daily-morning.md    # 朝のDaily作成
     │   ├── daily-evening.md    # 夜のDaily更新
     │   ├── english-lesson.md   # 英語レッスンフィードバック
-    │   └── meeting-minutes.md  # 議事録自動生成
+    │   ├── meeting-minutes.md  # 議事録自動生成
+    │   └── commit-message.md   # Gitコミットメッセージ生成
     ├── requirements.txt     # Python依存関係
     └── settings.json       # Claude Code設定
 ```
@@ -175,32 +179,40 @@ Claude Code使用時は自動でフォーマットされます。
     - 振り返り（感謝・Good・Motto）を追加
     - 明日のタスクを計画
 
-- **`/english-lesson`**: 英会話レッスンフィードバック生成（日付引数必須）
+- **`/english-lesson [date]`**: 英会話レッスンフィードバック生成（日付引数対応）
     - 音声ファイルの文字起こし実行
     - レッスン内容の分析とフィードバック生成
     - 文法・表現の改善点を具体的に提案
     - 03_eng_studyフォルダに日付付きで自動保存
 
-- **`/meeting-minutes`**: 議事録自動生成（日付引数必須）
+- **`/meeting-minutes [date]`**: 議事録自動生成（日付引数対応）
     - 音声ファイルの文字起こし実行
     - 文字起こしテキストから詳細な議事録を生成
     - 会議概要、報告事項、討議事項、決定事項、アクションアイテムを整理
     - 04_Meetingsフォルダに日付付きで自動保存
+
+- **`/commit-message`**: Gitコミットメッセージ生成
+    - git statusとdiffから変更内容を分析
+    - 最近のコミットスタイルを参考に
+    - 規約に沿ったコミットメッセージを自動生成
 
 ### コマンド実行例
 
 Claude Code で以下のようにコマンドを実行：
 
 ```bash
-# 朝のDaily Note作成
-/daily-morning
+# 朝のDaily Note作成（日付省略時は今日）
+/daily-morning [yyyy-mm-dd]
 
-# 夜のDaily Note更新
-/daily-evening
+# 夜のDaily Note更新（日付省略時は今日）
+/daily-evening [yyyy-mm-dd]
 
-# 英語レッスンフィードバック生成（日付引数が必要）
-/english-lesson yyyy-mm-dd
+# 英語レッスンフィードバック生成（日付引数対応）
+/english-lesson [yyyy-mm-dd]
 
-# 議事録自動生成（日付引数が必要）
-/meeting-minutes yyyy-mm-dd
+# 議事録自動生成（日付引数対応）
+/meeting-minutes [yyyy-mm-dd]
+
+# Gitコミットメッセージ生成
+/commit-message
 ```

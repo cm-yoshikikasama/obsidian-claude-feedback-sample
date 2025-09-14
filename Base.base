@@ -1,0 +1,26 @@
+filters:
+  and:
+    - file.ext == "md"
+views:
+  - type: table
+    name: 01_Daily
+    filters:
+      and:
+        - file.folder.startsWith("01_Daily/")
+  - type: table
+    name: 02_RoughNotes
+    filters:
+      and:
+        - file.folder == "02_RoughNotes"
+  - type: cards
+    name: 07_Clippings
+    filters:
+      and:
+        - file.folder == "07_Clippings"
+    image: note.image
+    imageFit: contain
+  - type: table
+    name: 06_blog
+    filters:
+      and:
+        - file.folder == "06_blog"
