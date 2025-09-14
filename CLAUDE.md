@@ -10,11 +10,13 @@ This is a personal Obsidian vault containing organized markdown notes in Japanes
 
 ### 1. Obsidian Vault Structure
 
-- **00_Configs/**: Configuration files and templates
+- **00_Configs/**: Configuration files and templates (Extra/, Templates/)
 - **01_Daily/**: Daily notes and logs
-- **02_Inbox/**: Temporary notes and research materials
-- **03_eng_study/**: English study materials
-- **04_Meetings/**: Meeting notes and minutes
+- **02_Weekly/**: Weekly summaries and AI reviews
+- **03_RoughNotes/**: Temporary notes and rough materials
+- **04_eng_study/**: English study materials and lesson feedback
+- **05_Meetings/**: Meeting notes and minutes
+- **06_Clippings/**: Web clippings and saved articles
 
 ### 2. Audio/Video Transcription Tool
 
@@ -62,10 +64,12 @@ uv run today_cal/today-calendar.py
 
 The project includes several slash commands in `.claude/commands/`:
 
-- `/daily-morning`: Create morning daily note with calendar events and previous day's tasks
-- `/daily-evening`: Update evening daily note with reflections and tomorrow's planning  
+- `/daily-morning [date]`: Create morning daily note with calendar events and previous day's tasks
+- `/daily-evening [date]`: Update evening daily note with reflections and tomorrow's planning
 - `/english-lesson [date]`: Generate English lesson feedback from audio transcription
 - `/meeting-minutes [date]`: Generate meeting minutes from audio transcription
+- `/commit-message`: Generate Git commit messages from staged changes
+- `/weekly-review [monday-date]`: Generate weekly summaries and AI reviews
 
 ## Architecture Details
 
@@ -78,11 +82,21 @@ The vault uses structured templates in `00_Configs/Templates/`:
 
 ### Todo Organization
 
-Daily notes follow a consistent todo categorization:
+Daily notes follow a consistent todo categorization and 5-stage status system:
+
+**Categories:**
 
 - Aプロジェクト, Bプロジェクト, Cプロジェクト (work projects)
 - ブログ (blog-related tasks)
 - その他 (other tasks)
+
+**Status System:**
+
+- `[ ]` 未着手 (Not started)
+- `[/]` 進行中 (In progress)
+- `[R]` レビュー中 (Under review)
+- `[x]` 完了 (Completed)
+- `[-]` 中止 (Cancelled/Postponed)
 
 ### Audio Transcription Pipeline
 
@@ -114,11 +128,13 @@ Daily notes follow a consistent todo categorization:
 ### Python Dependencies (`.claude/requirements.txt`)
 
 Audio/Video transcription:
+
 - `vertexai`: Google's AI platform for transcription
 - `python-dotenv`: Environment variable management
 - `ffmpeg-python`: Video to audio conversion
 
 Google Calendar integration:
+
 - `google-auth`, `google-auth-oauthlib`, `google-auth-httplib2`: OAuth2 authentication
 - `google-api-python-client`: Calendar API client
 
@@ -134,6 +150,7 @@ GOOGLE_APPLICATION_CREDENTIALS=path/to/service-account-key.json
 ```
 
 Google Calendar integration requires OAuth2 setup:
+
 - `cal_client_secret.json` in `.claude/` directory
 - First run will create `token.json` automatically
 
@@ -156,3 +173,16 @@ Google Calendar integration requires OAuth2 setup:
 - Use templates from `00_Configs/Templates/` for structured notes
 - Maintain consistent categorization in todo sections
 - Respect the bilingual nature of content
+
+### Key System Files
+
+- **Base.base**: Obsidian Base plugin configuration for database-like views
+- **.prettierrc**: Markdown formatting rules (consistent across all .md files)
+- **.claude/format-md.sh**: Auto-format script triggered by Claude Code hooks
+
+## Important Instruction Reminders
+
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
