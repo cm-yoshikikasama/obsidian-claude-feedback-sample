@@ -49,8 +49,10 @@ Parse calendar output to understand the target date's events and generate releva
 
 ### Step 2: Find Target Date's Daily Note
 
-- Locate the daily note in `01_Daily/YYYY/MM/[TARGET_DATE].md` format
+- Use Glob tool with `path=".."` and `pattern="01_Daily/**/*[TARGET_DATE].md"` to find the daily note
+- The file should be in `01_Daily/YYYY/MM/[TARGET_DATE].md` format
 - Read the file to understand current content structure
+- Note: Working directory is `.claude`, so use `path=".."` to search in parent directory
 
 ### Step 3: Ask User Questions with Calendar Context (一つずつ質問)
 
