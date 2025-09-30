@@ -47,12 +47,12 @@ echo "Generating weekly review for: $START_DATE to $END_DATE (Mon-Fri)"
 
 ### Step 2: Find and Read Daily Notes
 
-Search for daily notes in these patterns and read all within the target week:
-
-- `01_Daily/YYYY/MM/YYYY-MM-DD.md`
-- Look for other date-based patterns if needed
-
-Use Glob to find potential daily note files, then Read each one that falls within the date range.
+- **IMPORTANT**: Current directory is `.claude/`, so you MUST search from parent directory
+- Use bash command: `find ../01_Daily -name "*.md" -type f | sort` to find all daily notes
+- Alternative: Use Glob with `Glob(path="..", pattern="01_Daily/**/*.md")`
+- Filter files within the target date range (START_DATE to END_DATE)
+- Daily notes follow pattern: `01_Daily/YYYY/MM/YYYY-MM-DD.md`
+- Read each file that falls within the target week
 
 ### Step 3: Extract and Analyze Information
 

@@ -30,7 +30,10 @@ Find and read the latest `*_transcript.txt` file from output directory.
 
 ### Step 3: Load Previous Feedback
 
-Read the latest feedback file from `03_eng_study/` folder (format: `yyyy-mm-dd-feedback.md`).
+- **IMPORTANT**: Current directory is `.claude/`, so you MUST search from parent directory
+- Use bash command: `find ../04_EngStudy -name "*-feedback.md" -type f | sort -r | head -1` to find latest feedback
+- Alternative: Use Glob with `Glob(path="..", pattern="04_EngStudy/**/*-feedback.md")`
+- Read the latest feedback file (format: `yyyy-mm-dd-feedback.md`)
 
 ### Step 4: Generate Feedback
 

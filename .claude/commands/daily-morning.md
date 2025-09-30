@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(date:*), Bash(TZ=*), Bash(uv:*), Write, Read, Glob, LS
+allowed-tools: Bash(cd:*), Bash(source:*), Bash(date:*), Bash(TZ=*), Bash(uv:*), Bash(TARGET_DATE=*), Write, Read, Glob, LS
 argument-hint: [YYYY-MM-DD]
 description: Create daily note from calendar events and previous tasks (optional: specific date)
 ---
@@ -49,9 +49,9 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 
 ### Step 2: Get Previous Tasks
 
-- Use Glob tool with `path=".."` and `pattern="01_Daily/**/*.md"` to find daily notes
-- This pattern matches all markdown files in the 01_Daily directory structure
-- Sort the results to get the most recent file
+- **IMPORTANT**: Current directory is `.claude/`, so you MUST use bash to find daily notes from parent directory
+- Use bash command: `find ../01_Daily -name "*.md" -type f | sort -r | head -1` to get the most recent daily note file
+- If Glob tool is used, you MUST specify `path=".."` parameter explicitly: `Glob(path="..", pattern="01_Daily/**/*.md")`
 - Read the latest daily note and extract "明日やる" section content
 - Note: Tasks use these statuses: [ ] 未着手, [/] 進行中, [R] レビュー中, [x] 完了, [-] 中止
 - If no previous daily note exists, skip to Step 3B
