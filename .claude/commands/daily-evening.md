@@ -25,8 +25,8 @@ PROJECT_C = "Cプロジェクト"
 1. Determine target date from argument or use today
 2. Get Google Calendar events for target date
 3. Find and read target date's daily note
-4. Ask user 6 questions one by one about achievements and reflection
-5. Update the existing daily note file with responses
+4. Ask user 5 questions one by one about achievements and reflection
+5. Update the existing daily note file with responses and auto-generate tomorrow's tasks
 
 ### Step 0: Determine Target Date
 
@@ -102,9 +102,6 @@ Google Calendarから、その他の予定で以下がありました：
 **質問5: 今日の振り返り**
 今日1日を振り返って、感謝したこと、よかったこと・うまくいかなかったことなどを自由に話してください。
 
-**質問6: 明日やること（全体）**
-明日やる予定のタスクを教えてください。プロジェクト別（{PROJECT_A}、{PROJECT_B}、{PROJECT_C}、ブログ、その他）に分けてお答えください。なければ「未定」とお答えください。
-
 ### Step 4: Update Daily Note File
 
 After collecting all responses, update the daily note file:
@@ -125,8 +122,11 @@ After collecting all responses, update the daily note file:
     - Good: Add user responses as bullet points
     - Motto: Add user responses
 5. Update 明日やる section:
-    - Replace "未定" with specific tasks from user responses
-    - Format as checkboxes
+    - Automatically extract tasks from "今日のTodo" section that are NOT completed (状態が [x] でないもの)
+    - Include tasks with status: [ ] 未着手, [/] 進行中, [R] レビュー中
+    - Exclude tasks with status: [x] 完了, [-] 中止
+    - Copy these tasks to "明日やる" section, resetting all checkboxes to [ ]
+    - If a project has no remaining tasks, set it to "[ ] 未定"
 
 **Execute all steps and update the file immediately.**
 
@@ -173,13 +173,13 @@ After collecting all responses, update the daily note file:
 ## 明日やる
 
 - {PROJECT_A}
-    - [ ] [具体的なタスク]
+    - [ ] [今日のTodoから未完了タスクを自動抽出]
 - {PROJECT_B}
-    - [ ] [具体的なタスク]
+    - [ ] [今日のTodoから未完了タスクを自動抽出]
 - {PROJECT_C}
-    - [ ] [具体的なタスク]
+    - [ ] [今日のTodoから未完了タスクを自動抽出]
 - ブログ
-    - [ ] [具体的なタスク]
+    - [ ] [今日のTodoから未完了タスクを自動抽出]
 - その他
-    - [ ] [具体的なタスク]
+    - [ ] [今日のTodoから未完了タスクを自動抽出]
 ```

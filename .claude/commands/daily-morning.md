@@ -25,8 +25,7 @@ PROJECT_C = "Cプロジェクト"
 1. Determine target date from argument or use today
 2. Get Google Calendar events and add to MTG・イベント section
 3. Get previous day's todo from latest daily note
-4. Ask user for todo updates
-5. Create target date's daily note file
+4. Create target date's daily note file
 
 ### Step 0: Determine Target Date
 
@@ -54,24 +53,9 @@ Parse calendar output and convert each event to checkbox format for MTG・イベ
 - If Glob tool is used, you MUST specify `path=".."` parameter explicitly: `Glob(path="..", pattern="01_Daily/**/*.md")`
 - Read the latest daily note and extract "明日やる" section content
 - Note: Tasks use these statuses: [ ] 未着手, [/] 進行中, [R] レビュー中, [x] 完了, [-] 中止
-- If no previous daily note exists, skip to Step 3B
+- Use the extracted tasks directly without asking the user for confirmation
 
-### Step 3A: User Confirmation (when previous tasks exist)
-
-Show previous tasks and ask: "今日のTodoに修正や追加はありますか？修正がある場合は具体的に教えてください。修正がなければ「なし」とお答えください。"
-
-### Step 3B: User Input (when no previous tasks exist)
-
-Ask user for today's todos by project:
-"前回のdaily noteがないため、今日の各プロジェクトの予定を教えてください：
-
-- Aプロジェクト:
-- Bプロジェクト:
-- Cプロジェクト:
-- ブログ:
-- その他: "
-
-### Step 4: Create Daily Note
+### Step 3: Create Daily Note
 
 Create `01_Daily/YYYY/MM/[TARGET_DATE].md`:
 
@@ -95,15 +79,15 @@ tags:
 ## 今日のTodo
 
 - {PROJECT_A}
-  [Previous day tasks + user updates]
+  [Previous day tasks from "明日やる" section]
 - {PROJECT_B}
-  [Previous day tasks + user updates]
+  [Previous day tasks from "明日やる" section]
 - {PROJECT_C}
-  [Previous day tasks + user updates]
+  [Previous day tasks from "明日やる" section]
 - ブログ
-  [Previous day tasks + user updates]
+  [Previous day tasks from "明日やる" section]
 - その他
-  [Previous day tasks + user updates]
+  [Previous day tasks from "明日やる" section]
 
 ## 今日の振り返り
 
