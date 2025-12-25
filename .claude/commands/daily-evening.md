@@ -63,69 +63,107 @@ Parse calendar output to understand the target date's events and generate releva
 - The file should be in `01_Daily/YYYY/MM/[TARGET_DATE].md` format
 - Read the file to understand current content structure
 
-### Step 3: Ask User Questions with Calendar Context (一つずつ質問)
+### Step 3: Ask User Questions with Calendar Context (AskUserQuestionツールを使用)
 
-First, analyze the Google Calendar events and match them to projects. Then ask these questions one by one, incorporating calendar information. Wait for each response before proceeding:
+First, analyze the Google Calendar events and match them to projects. Then use the AskUserQuestion tool to ask questions in checkbox format.
 
-**ステータス番号：**
-1=未着手, 2=進行中, 3=レビュー中, 4=完了, 5=中止
+**IMPORTANT**: Use the AskUserQuestion tool for all questions below. This provides an interactive checkbox/selection interface.
 
-**質問1: {PROJECT_A}のタスク進捗**
-Google Calendarから、{PROJECT_A}関連で以下の予定がありました：
-[カレンダーの該当イベントをリスト表示]
+ステータス番号: 1=未着手, 2=進行中, 3=レビュー中, 4=完了, 5=中止
 
-デイリーノートの{PROJECT_A}タスクは以下です：
+#### 質問パターン（プロジェクトごと）
 
-1. [タスク1の内容]
-2. [タスク2の内容]
-3. [タスク3の内容]
+IMPORTANT: For each project, use a SINGLE AskUserQuestion call with multiple questions (up to 4). This creates a tabbed interface where users can switch between questions.
 
-各タスクのステータスを番号で入力してください（例: 1-4, 2-2, 3-1）：
-追加でやったタスクがあれば教えてください。
+For each project (PROJECT_A, PROJECT_B, PROJECT_C, ブログ・その他):
 
-**質問2: {PROJECT_B}のタスク進捗**
-Google Calendarから、{PROJECT_B}関連で以下の予定がありました：
-[カレンダーの該当イベントをリスト表示]
+1. Before asking questions, output text message showing Google Calendar events for this project
+2. Collect all tasks in the project from the daily note
+3. SKIP tasks that are "未定" (not yet determined) - do not ask about their status
+4. Create one question per task (max 3 tasks to leave room for additional task question)
+5. Add one final question asking about additional tasks
+6. If ALL tasks are "未定", only ask the additional tasks question
+7. Send all questions in ONE AskUserQuestion call
 
-デイリーノートの{PROJECT_B}タスクは以下です：
+First, output a text message like:
 
-1. [タスク1の内容]
-2. [タスク2の内容]
-3. [タスク3の内容]
+```text
+## {PROJECT_NAME}のタスク進捗
 
-各タスクのステータスを番号で入力してください（例: 1-4, 2-2, 3-1）：
-追加でやったタスクがあれば教えてください。
+Google Calendar予定:
+- [event 1]
+- [event 2]
+```
 
-**質問3: {PROJECT_C}のタスク進捗**
-Google Calendarから、{PROJECT_C}関連で以下の予定がありました：
-[カレンダーの該当イベントをリスト表示]
+Then ask questions:
 
-デイリーノートの{PROJECT_C}タスクは以下です：
+Task status question format (for each task in the project):
 
-1. [タスク1の内容]
-2. [タスク2の内容]
-3. [タスク3の内容]
+```text
+タスク「[タスク内容]」の状態を教えてください。
+```
 
-各タスクのステータスを番号で入力してください（例: 1-4, 2-2, 3-1）：
-追加でやったタスクがあれば教えてください。
+header: "タスク[N]" (e.g., "タスク1", "タスク2", etc.)
 
-**質問4: ブログ・その他のタスク進捗**
-Google Calendarから、その他の予定で以下がありました：
-[カレンダーの該当イベントをリスト表示]
+multiSelect: false
 
-デイリーノートのブログ・その他のタスクは以下です：
+options for task status:
 
-1. [タスク1の内容]
-2. [タスク2の内容]
-3. [タスク3の内容]
+- label: "未着手", description: "タスクにまだ着手していない"
+- label: "進行中", description: "タスクを進行中"
+- label: "レビュー中", description: "タスクがレビュー待ち"
+- label: "完了", description: "タスクが完了"
 
-各タスクのステータスを番号で入力してください（例: 1-4, 2-2, 3-1）：
-追加でやったタスクがあれば教えてください。
+For cancelled tasks (中止), user can input via "Other" field.
 
-**質問5: 今日の振り返り（目標に沿った振り返り）**
-今日1日をGoalsセクションに記載した目標に沿って振り返ってください（すべて答える必要はなく、気になる観点だけで構いません）:
+Additional tasks question format (final question in the project):
 
-各目標について、何か成果となるような行動、記録はありましたか？
+```text
+{PROJECT_NAME}で追加でやったタスクがあれば「Other」で入力してください。なければ「なし」を選択してください。
+```
+
+header: "追加タスク"
+
+multiSelect: false
+
+options (minimum 2 required):
+
+- label: "なし", description: "追加タスクはありません"
+- label: "入力する", description: "Otherで追加タスクを入力します"
+
+Note: User can input additional tasks via "Other" field.
+
+Example: If PROJECT_A has 2 tasks, send ONE AskUserQuestion call with 3 questions (task1, task2, additional tasks) that appear as tabs.
+
+#### 質問1: PROJECT_Aのタスク進捗
+
+Use AskUserQuestion tool for each task in PROJECT_A section
+
+#### 質問2: PROJECT_Bのタスク進捗
+
+Use AskUserQuestion tool for each task in PROJECT_B section
+
+#### 質問3: PROJECT_Cのタスク進捗
+
+Use AskUserQuestion tool for each task in PROJECT_C section
+
+#### 質問4: ブログ・その他のタスク進捗
+
+Use AskUserQuestion tool for each task in ブログ and その他 sections
+
+#### 質問5: 今日の振り返り（目標に沿った振り返り）
+
+Do NOT use AskUserQuestion tool for reflection. Instead, output a text message asking for reflection:
+
+```
+今日1日を設定した目標に沿って振り返ってください（該当する観点があれば教えてください）:
+
+- [目標1に関連する振り返り]
+- [目標2に関連する振り返り]
+- [目標3に関連する振り返り]
+```
+
+Wait for user's text response. User can provide free-form text answers for each category they want to reflect on.
 
 ### Step 4: Update Daily Note File
 
