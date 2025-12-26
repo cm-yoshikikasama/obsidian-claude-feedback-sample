@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(python:*), Bash(ls:*), Bash(find:*), Write, Read, Glob, LS, Edit, MultiEdit, List
+allowed-tools: Bash(cd:*), Bash(ls:*), Bash(find:*), Bash(uv:*), Write, Read, Glob, LS, Edit, MultiEdit
 description: Generate English lesson feedback from audio transcription
 argument-hint: YYYY-MM-DD
 ---
@@ -30,20 +30,20 @@ Find and read the latest `*_transcript.txt` file from output directory.
 
 ### Step 3: Load Previous Feedback
 
-- **IMPORTANT**: Current directory is `.claude/`, so you MUST search from parent directory
-- Use bash command: `find ../04_EngStudy -name "*-feedback.md" -type f | sort -r | head -1` to find latest feedback
-- Alternative: Use Glob with `Glob(path="..", pattern="04_EngStudy/**/*-feedback.md")`
-- Read the latest feedback file (format: `yyyy-mm-dd-feedback.md`)
+- IMPORTANT - Current directory is `.claude/`, so you MUST search from parent directory
+- Use bash command - `find ../04_EngStudy -name "*-feedback.md" -type f | sort -r | head -1` to find latest feedback
+- Alternative - Use Glob with `Glob(path="..", pattern="04_EngStudy/**/*-feedback.md")`
+- Read the latest feedback file (format - `yyyy-mm-dd-feedback.md`)
 
 ### Step 4: Generate Feedback
 
 Analyze the lesson transcript and generate detailed feedback. Save to `03_eng_study/$ARGUMENTS-feedback.md`.
 
-**Important: Read transcript and previous feedback before analysis.**
+Important - Read transcript and previous feedback before analysis.
 
 #### Feedback Requirements
 
-Generate detailed feedback **in English** including:
+Generate detailed feedback in English including
 
 #### Lesson Overview & Summary
 
@@ -66,12 +66,12 @@ Generate detailed feedback **in English** including:
 
 ※Consolidate all errors in one section with comprehensive coverage
 
-For grammar/expression improvements and long-term challenges, use this specific format:
+For grammar/expression improvements and long-term challenges, use this specific format
 
-- **Actual utterance**: "exact quote from recording"
-- **Issue**: detailed explanation of why this is incorrect
-- **Correct expression**: "proper expression"
-- **Improvement method**: specific learning/practice approach
+- Actual utterance - "exact quote from recording"
+- Issue - detailed explanation of why this is incorrect
+- Correct expression - "proper expression"
+- Improvement method - specific learning/practice approach
 
 #### Basic Communication Scenarios - Grammar & Expression Suggestions
 
@@ -86,4 +86,4 @@ For grammar/expression improvements and long-term challenges, use this specific 
 - Expressions used appropriately
 - Improvements from previous sessions (if any)
 
-**Execute all steps and report the generated feedback file path to user.**
+Execute all steps and report the generated feedback file path to user.

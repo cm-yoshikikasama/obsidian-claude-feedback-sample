@@ -4,12 +4,12 @@
 
 ## プロジェクト概要
 
-- **Obsidianボルト**: 構造化されたマークダウンノートシステム
-- **音声・動画 → テキスト変換**: AI を使用した文字起こしツール
-- **Google Calendar連携**: 今日の予定取得ツール
-- **議事録自動生成**: 音声ファイルから議事録を自動作成
-- **マークダウンフォーマット**: Prettierを使用したファイル統一フォーマット
-- **Obsidian Base プラグイン**: データベースライクなビュー管理（Base.base設定ファイル）
+- Obsidianボルト - 構造化されたマークダウンノートシステム
+- 音声・動画 → テキスト変換 - AI を使用した文字起こしツール
+- Google Calendar連携 - 今日の予定取得ツール
+- 議事録自動生成 - 音声ファイルから議事録を自動作成
+- マークダウンフォーマット - Prettierを使用したファイル統一フォーマット
+- Obsidian Base プラグイン - データベースライクなビュー管理（Base.base設定ファイル）
 
 ## ディレクトリ構造
 
@@ -45,13 +45,13 @@
 
 ## クイックスタート
 
-1. **セットアップ手順**を上から順番に実行
-2. **Obsidianアプリケーション**でこのディレクトリをボルトとして開く
-3. Claude Code で**カスタムコマンド**を使用してノートを作成・管理
+1. セットアップ手順を上から順番に実行
+2. Obsidianアプリケーションでこのディレクトリをボルトとして開く
+3. Claude Code でカスタムコマンドを使用してノートを作成・管理
 
 ## セットアップ手順
 
-上から順番に実行してください。
+上から順番に実行
 
 ### 必要な環境
 
@@ -100,26 +100,26 @@ uv pip install -r requirements.txt
 
 #### 4. Google Cloud Platform 設定
 
-音声・動画文字起こし用：
+音声・動画文字起こし用
 
 1. [Google Cloud Console](https://console.cloud.google.com/) にアクセス
-2. 新しいプロジェクト作成 or 既存プロジェクト選択
-3. **APIs & Services** → **Library** → **Vertex AI API** を検索して有効化
-4. サービスアカウントキーを作成・ダウンロード
+1. 新しいプロジェクト作成 or 既存プロジェクト選択
+1. APIs & Services → Library → Vertex AI API を検索して有効化
+1. サービスアカウントキーを作成・ダウンロード
 
 #### 5. Google Calendar API 設定
 
-カレンダー連携用：
+カレンダー連携用
 
-1. **APIs & Services** → **Library** → **Google Calendar API** を検索して有効化
-2. **OAuth consent screen** を設定（Internal または External）
-3. **Credentials** → **Create Credentials** → **OAuth 2.0 Client IDs**
-4. Application type: **Desktop application**
-5. `cal_client_secret.json` をダウンロードし `.claude/` に配置
+1. APIs & Services → Library → Google Calendar API を検索して有効化
+1. OAuth consent screen を設定（Internal または External）
+1. Credentials → Create Credentials → OAuth 2.0 Client IDs
+1. Application type - Desktop application
+1. `cal_client_secret.json` をダウンロードし `.claude/` に配置
 
 #### 6. 環境変数の設定
 
-`.claude/audio_video_to_text/`ディレクトリに`.env`ファイルを作成:
+`.claude/audio_video_to_text/`ディレクトリに`.env`ファイルを作成
 
 ```env
 PROJECT_ID=your-gcp-project-id
@@ -127,6 +127,31 @@ REGION=your-region
 FILE_NAME=audio
 GOOGLE_APPLICATION_CREDENTIALS=path/to/your/service-account-key.json
 ```
+
+#### 7. プロジェクト名と目標のカスタマイズ
+
+デイリーノートで使用するプロジェクト名と目標を自分の環境に合わせて設定
+
+1. `.claude/commands/daily-morning.md` を開く
+1. 以下のセクションを編集
+
+    ```txt
+    ## プロジェクト設定
+
+    PROJECT_A = "あなたのプロジェクト名A"
+    PROJECT_B = "あなたのプロジェクト名B"
+    PROJECT_C = "あなたのプロジェクト名C"
+
+    ## 目標設定
+
+    GOAL_1 = "あなたの目標1"
+    GOAL_2 = "あなたの目標2"
+    GOAL_3 = "あなたの目標3"
+    ```
+
+1. `.claude/commands/daily-evening.md` も同様に編集
+
+これらの変数は、Daily Note作成時のテンプレートで自動的に使用されます。
 
 ## 使用方法
 
@@ -167,48 +192,43 @@ Claude Code使用時は自動でフォーマットされます。
 
 ## Claude Code カスタムコマンド
 
-`.claude/commands/` ディレクトリには Claude Code で使用するカスタムコマンド（スラッシュコマンド）が含まれています：
+`.claude/commands/` ディレクトリには Claude Code で使用するカスタムコマンド（スラッシュコマンド）が含まれています
 
 ### タスクステータス管理システム
 
-デイリーノートでは以下の5段階ステータス管理を採用：
+デイリーノートでは以下の5段階ステータス管理を採用
 
-- `[ ]` **未着手** - まだ開始していないタスク
-- `[/]` **進行中** - 現在作業中のタスク
-- `[R]` **レビュー中** - 完了したがレビュー・承認待ちのタスク
-- `[x]` **完了** - 完全に完了したタスク
-- `[-]` **中止** - キャンセルまたは延期されたタスク
+- `[ ]` 未着手 - まだ開始していないタスク
+- `[/]` 進行中 - 現在作業中のタスク
+- `[R]` レビュー中 - 完了したがレビュー・承認待ちのタスク
+- `[x]` 完了 - 完全に完了したタスク
+- `[-]` 中止 - キャンセルまたは延期されたタスク
 
 ### 利用可能なコマンド
 
-- **`/daily-morning`**: 朝のDaily Note作成アシスタント
+- `/daily-morning` - 朝のDaily Note作成アシスタント
     - 前日のDaily Noteから「明日やる」タスクを引き継ぎ
     - Google Calendarから今日の予定を取得
     - 新しいDaily Noteファイルを自動作成
-
-- **`/daily-evening`**: 夜のDaily Note更新アシスタント
+- `/daily-evening` - 夜のDaily Note更新アシスタント
     - 今日のタスク進捗を一括確認・更新（5段階ステータス管理対応）
     - 目標に沿った振り返りを追加（カスタマイズ可能）
     - 明日のタスクを計画
-
-- **`/english-lesson [date]`**: 英会話レッスンフィードバック生成（日付引数対応）
+- `/english-lesson [date]` - 英会話レッスンフィードバック生成（日付引数対応）
     - 音声ファイルの文字起こし実行
     - レッスン内容の分析とフィードバック生成
     - 文法・表現の改善点を具体的に提案
     - 04_EngStudyフォルダに日付付きで自動保存
-
-- **`/meeting-minutes [date]`**: 議事録自動生成（日付引数対応）
+- `/meeting-minutes [date]` - 議事録自動生成（日付引数対応）
     - 音声ファイルの文字起こし実行
     - 文字起こしテキストから詳細な議事録を生成
     - 会議概要、報告事項、討議事項、決定事項、アクションアイテムを整理
     - 05_Meetingsフォルダに日付付きで自動保存
-
-- **`/commit-message`**: Gitコミットメッセージ生成
+- `/commit-message` - Gitコミットメッセージ生成
     - git statusとdiffから変更内容を分析
     - 最近のコミットスタイルを参考に
     - 規約に沿ったコミットメッセージを自動生成
-
-- **`/weekly-review [monday-date]`**: 週次まとめとAIレビュー生成
+- `/weekly-review [monday-date]` - 週次まとめとAIレビュー生成
     - デイリーノートから1週間分（月〜金）の活動を分析
     - プロジェクト別の成果をまとめ
     - AI による生産性分析とフィードバック提供
@@ -217,7 +237,7 @@ Claude Code使用時は自動でフォーマットされます。
 
 ### コマンド実行例
 
-Claude Code で以下のようにコマンドを実行：
+Claude Code で以下のようにコマンドを実行
 
 ```bash
 # 朝のDaily Note作成（日付省略時は今日）

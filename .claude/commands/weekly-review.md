@@ -1,28 +1,28 @@
 ---
-allowed-tools: Bash, Write, Read, Glob, Edit
-argument-hint: [monday-date]
-description: Generate weekly summary and AI review from daily notes (Monday-Friday)
+allowed-tools: Bash(date:*), Bash(find:*), Write, Read, Glob, Edit
+argument-hint: [月曜日の日付]
+description: デイリーノート（月〜金）から週次まとめとAIレビューを生成
 ---
 
-# Weekly Summary & AI Review Generator（週次まとめとAIレビュー生成）
+# 週次まとめとAIレビュー生成
 
-## Overview
+## 概要
 
-This command generates a weekly summary and AI review by analyzing daily notes from a specified week. It extracts key activities and provides AI-generated insights and recommendations.
+このコマンドは、指定された週のデイリーノートを分析して週次まとめとAIレビューを生成する。主要な活動を抽出し、AIが生成したインサイトと推奨事項を提供する。
 
-## Date Handling
+## 日付の扱い
 
-- If monday-date argument ($1) is provided in YYYY-MM-DD format, use that Monday as start date
-- Week is Monday to Friday (5 working days)
-- If no argument provided, use last week's Monday (last complete work week)
+- monday-date引数（$1）がYYYY-MM-DD形式で指定された場合、その月曜日を開始日として使用
+- 週は月曜日から金曜日（5営業日）
+- 引数が指定されない場合、先週の月曜日（直近の完了した作業週）を使用
 
-## Your Task
+## タスク
 
-Execute the following steps in order to generate a complete weekly review:
+完全な週次レビューを生成するために、以下のステップを順番に実行する
 
-### Step 1: Determine Target Week
+### ステップ1: 対象週の決定
 
-First, calculate the target date range:
+まず、対象の日付範囲を計算する
 
 ```bash
 # If Monday date provided, use it; otherwise calculate last complete work week
@@ -45,52 +45,52 @@ fi
 echo "Generating weekly review for: $START_DATE to $END_DATE (Mon-Fri)"
 ```
 
-### Step 2: Find and Read Daily Notes
+### ステップ2: デイリーノートの検索と読み込み
 
-- **IMPORTANT**: Current directory is `.claude/`, so you MUST search from parent directory
-- Use bash command: `find ../01_Daily -name "*.md" -type f | sort` to find all daily notes
-- Alternative: Use Glob with `Glob(path="..", pattern="01_Daily/**/*.md")`
-- Filter files within the target date range (START_DATE to END_DATE)
-- Daily notes follow pattern: `01_Daily/YYYY/MM/YYYY-MM-DD.md`
-- Read each file that falls within the target week
+- 重要: 現在のディレクトリは`.claude/`なので、親ディレクトリから検索する必要がある
+- bashコマンド`find ../01_Daily -name "*.md" -type f | sort`を使用してすべてのデイリーノートを検索
+- または`Glob(path="..", pattern="01_Daily/**/*.md")`を使用
+- 対象の日付範囲（START_DATEからEND_DATE）内のファイルをフィルタリング
+- デイリーノートは`01_Daily/YYYY/MM/YYYY-MM-DD.md`のパターンに従う
+- 対象週に該当する各ファイルを読み込む
 
-### Step 3: Extract and Analyze Information
+### ステップ3: 情報の抽出と分析
 
-From each daily note, systematically extract:
+各デイリーノートから以下を体系的に抽出する
 
-1. **MTG・イベント** - Completed meetings and events (check items marked with ✓ or completed)
-2. **今日のTodo** - Tasks by project categories with status tracking:
-    - [ ] 未着手 (pending)
-    - [/] 進行中 (in progress)
-    - [R] レビュー中 (under review)
-    - [x] 完了 (completed)
-    - [-] 中止 (cancelled)
-3. **今日の振り返り** sections:
-    - **感謝** - Gratitude entries
-    - **Good** - Positive points
-    - **Motto** - Daily mottos or insights
-4. **明日やる** - Plans that were made
-5. Any **thino** entries or quick notes
-6. Any other significant content or achievements
+1. MTG・イベント - 完了した会議とイベント（チェックマークまたは完了としてマークされた項目）
+2. 今日のTodo - プロジェクトカテゴリ別のタスクとステータス追跡
+    - [ ] 未着手
+    - [/] 進行中
+    - [R] レビュー中
+    - [x] 完了
+    - [-] 中止
+3. 今日の振り返りセクション
+    - 感謝 - 感謝の記録
+    - Good - 良かった点
+    - Motto - 日々の教訓やインサイト
+4. 明日やる - 作成された計画
+5. thinoエントリまたはクイックノート
+6. その他の重要なコンテンツや成果
 
-### Step 4: Aggregate and Generate Insights
+### ステップ4: 集約とインサイト生成
 
-Organize extracted information and generate AI-powered insights:
+抽出した情報を整理し、AIによるインサイトを生成する
 
-1. **Daily Summaries** - Create meaningful summaries for each day
-2. **Project Analysis** - Group activities by project and assess progress
-3. **Pattern Recognition** - Identify recurring themes, challenges, or successes
-4. **Productivity Analysis** - Analyze task completion patterns
-5. **Balance Assessment** - Evaluate time/effort distribution across projects
-6. **Growth Opportunities** - Identify areas for improvement based on patterns
+1. 日次サマリ - 各日の意味のあるサマリを作成
+2. プロジェクト分析 - プロジェクト別に活動をグループ化し進捗を評価
+3. パターン認識 - 繰り返されるテーマ、課題、成功を特定
+4. 生産性分析 - タスク完了パターンを分析
+5. バランス評価 - プロジェクト間の時間・労力配分を評価
+6. 成長機会 - パターンに基づく改善領域を特定
 
-### Step 5: Create Weekly Review File
+### ステップ5: 週次レビューファイルの作成
 
-Generate the file at: `02_Weekly/YYYYMMDD_weekly_review.md`
+`02_Weekly/YYYYMMDD_weekly_review.md`にファイルを生成する
 
-Use the following template structure, populated with actual data and insights:
+以下のテンプレート構造を使用し、実際のデータとインサイトを入力する
 
-## Weekly Review Template
+## 週次レビューテンプレート
 
 ```markdown
 # 週次まとめとAIレビュー - [START_DATE]週
@@ -134,34 +134,33 @@ Use the following template structure, populated with actual data and insights:
 ## 📎 参照ファイル
 
 [参照したデイリーノートのwikiリンク]
-
 ```
 
-### Step 6: AI Analysis and Feedback Generation
+### ステップ6: AI分析とフィードバック生成
 
-When generating the AI feedback sections, analyze the extracted data for:
+AIフィードバックセクションを生成する際、抽出されたデータから以下を分析する
 
-1. **生産性パターン** - Look for productivity patterns, peak performance times, task completion rates
-2. **バランス分析** - Assess whether time allocation aligns with priorities
-3. **成長指標** - Identify learning opportunities and skill development areas
-4. **習慣分析** - Recognize positive habits worth reinforcing and negative patterns to address
-5. **ストレス指標** - Look for signs of overwhelm, burnout, or balance issues
-6. **協力関係** - Analyze team interactions and collaboration effectiveness
+1. 生産性パターン - 生産性パターン、ピークパフォーマンス時間、タスク完了率を探す
+2. バランス分析 - 時間配分が優先事項と一致しているかを評価
+3. 成長指標 - 学習機会とスキル開発領域を特定
+4. 習慣分析 - 強化すべき良い習慣と対処すべき悪いパターンを認識
+5. ストレス指標 - 過負荷、燃え尽き、バランスの問題の兆候を探す
+6. 協力関係 - チームのインタラクションとコラボレーションの効果を分析
 
-### Execution Instructions
+### 実行手順
 
-**Execute all steps immediately and create the complete weekly review file with:**
+すべてのステップをただちに実行し、以下を含む完全な週次レビューファイルを作成する
 
-1. ✅ Proper date calculation and range determination
-2. ✅ Systematic extraction from all daily notes in range
-3. ✅ Meaningful daily summaries with actual achievements
-4. ✅ Project-based organization of activities
-5. ✅ AI-generated insights and patterns recognition
-6. ✅ Specific, actionable improvement recommendations
-7. ✅ Quantitative metrics where possible
-8. ✅ Proper file linking to referenced daily notes
-9. ✅ Professional formatting and structure
+1. 適切な日付計算と範囲決定
+2. 範囲内のすべてのデイリーノートからの体系的な抽出
+3. 実際の成果を含む意味のある日次サマリ
+4. プロジェクトベースの活動整理
+5. AIが生成したインサイトとパターン認識
+6. 具体的で実行可能な改善推奨事項
+7. 可能な限り定量的な指標
+8. 参照したデイリーノートへの適切なファイルリンク
+9. プロフェッショナルなフォーマットと構造
 
-**Save the final file to: `02_Weekly/[YYYYMMDD]_weekly_review.md`**
+最終ファイルを`02_Weekly/[YYYYMMDD]_weekly_review.md`に保存すること。
 
-The generated review should be comprehensive, insightful, and immediately actionable for continuous improvement.
+生成されたレビューは包括的で、洞察に富み、継続的改善のためにすぐに実行可能でなければならない。

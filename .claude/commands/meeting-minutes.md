@@ -1,47 +1,47 @@
 ---
-allowed-tools: Bash, Write, Read, Glob, LS
-description: Generate meeting minutes from audio transcription
+allowed-tools: Bash(ls:*), Bash(cd:*), Bash(uv:*), Write, Read, Glob, LS
+description: 音声文字起こしから議事録を生成
 argument-hint: YYYY-MM-DD
 ---
 
-# Meeting Minutes Generator
+# 議事録生成
 
-## Your task
+## タスク
 
-1. Check and transcribe audio files from input directory
-2. Read the latest transcript file
-3. Generate detailed meeting minutes and save to 04_Meetings folder
+1. inputディレクトリの音声ファイルを確認し文字起こしを実行
+2. 最新の文字起こしファイルを読み込む
+3. 詳細な議事録を生成し04_Meetingsフォルダに保存
 
-### Step 1: Check Audio Files and Transcribe
+### ステップ1: 音声ファイル確認と文字起こし
 
 ```bash
 ls .claude/audio_video_to_text/input/
 cd .claude/audio_video_to_text && uv run audio_video_to_text.py
 ```
 
-### Step 2: Read Latest Transcript
+### ステップ2: 最新の文字起こしファイル読み込み
 
 ```bash
 ls -la .claude/audio_video_to_text/output/
 ```
 
-Find and read the latest `*_transcript.txt` file from output directory.
+outputディレクトリから最新の`*_transcript.txt`ファイルを見つけて読み込む。
 
-### Step 3: Generate Meeting Minutes
+### ステップ3: 議事録生成
 
-Analyze transcript and generate detailed meeting minutes in Japanese. Save to `04_Meetings/$ARGUMENTS-[meeting name].md`.
+文字起こし内容を分析し、詳細な議事録を日本語で生成する。`04_Meetings/$ARGUMENTS-[会議名].md`に保存。
 
-**Important: Read transcript before analysis. Generate all content in Japanese.**
+重要: 分析前に必ず文字起こし内容を読み込むこと。すべての内容を日本語で生成すること。
 
-#### Meeting Minutes Requirements
+#### 議事録の要件
 
-Generate detailed meeting minutes including:
+以下を含む詳細な議事録を生成する
 
-1. **会議概要** - Meeting overview, date, participants, purpose
-2. **報告事項** - Reports and important information
-3. **討議事項** - Discussions and Q&A
-4. **決定事項** - Decisions and agreements
-5. **アクションアイテム** - Who, what, when (action items)
-6. **メモ** - Important remarks and issues
+1. 会議概要 - 会議の概要、日時、参加者、目的
+2. 報告事項 - 報告内容と重要な情報
+3. 討議事項 - 議論内容と質疑応答
+4. 決定事項 - 決定事項と合意事項
+5. アクションアイテム - 誰が、何を、いつまでに
+6. メモ - 重要な備考と課題
 
-**Execute all steps and report the generated meeting minutes file path to user.**
+すべてのステップを実行し、生成された議事録ファイルのパスをユーザーに報告すること。

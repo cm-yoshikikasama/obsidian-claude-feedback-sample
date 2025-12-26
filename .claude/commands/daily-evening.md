@@ -1,18 +1,18 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(date:*), Bash(TZ=*), Bash(uv:*), Write, Read, Glob, Edit, LS
+allowed-tools: Bash(cd:*), Bash(date:*), Bash(TZ=:*), Bash(uv:*), Bash(find:*), Write, Read, Glob, Edit, LS
 argument-hint: [YYYY-MM-DD]
-description: Update daily note with achievements and tomorrow's plan (optional: specific date)
+description: 成果と明日の計画でデイリーノートを更新（オプション: 特定の日付）
 ---
 
-# Daily Note Evening Assistant（夜用・更新）
+# デイリーノート夜用アシスタント（更新）
 
-## Date Handling
+## 日付の扱い
 
-- If date argument ($1) is provided in YYYY-MM-DD format, use that date
-- If no argument provided, use today's date (JST)
-- Target date: ${TARGET_DATE}
+- date引数（$1）がYYYY-MM-DD形式で指定された場合、その日付を使用
+- 引数が指定されない場合、今日の日付（JST）を使用
+- 対象日付: ${TARGET_DATE}
 
-## Project Configuration
+## プロジェクト設定
 
 ```txt
 PROJECT_A = "Aプロジェクト"
@@ -20,84 +20,84 @@ PROJECT_B = "Bプロジェクト"
 PROJECT_C = "Cプロジェクト"
 ```
 
-## Goals (目標) - Customize This Section
+## 目標設定
 
-ここに自分の目標を記載してください。例:
+```txt
+GOAL_1 = "技術力の向上"
+GOAL_2 = "プロジェクト管理能力の強化"
+GOAL_3 = "コミュニケーション能力の向上"
+```
 
-- [目標1: 例) 技術力の向上]
-- [目標2: 例) プロジェクト管理能力の強化]
-- [目標3: 例) コミュニケーション能力の向上]
+## タスク
 
-## Your task
+1. 引数から対象日付を決定、または今日の日付を使用
+2. 対象日付のGoogle Calendarイベントを取得
+3. 対象日付のデイリーノートを検索して読み込む
+4. 成果と振り返りについて5つの質問をユーザーに一つずつ行う
+5. 回答と自動生成された明日のタスクで既存のデイリーノートファイルを更新
 
-1. Determine target date from argument or use today
-2. Get Google Calendar events for target date
-3. Find and read target date's daily note
-4. Ask user 5 questions one by one about achievements and reflection
-5. Update the existing daily note file with responses and auto-generate tomorrow's tasks
-
-### Step 0: Determine Target Date
+### ステップ0: 対象日付の決定
 
 ```bash
 TARGET_DATE="$1"
 if [ -z "$TARGET_DATE" ]; then
-  # Explicitly use JST timezone
+  # 明示的にJSTタイムゾーンを使用
   TARGET_DATE=$(TZ=Asia/Tokyo date +%Y-%m-%d)
 fi
 echo "Processing daily note for: $TARGET_DATE"
 ```
 
-### Step 1: Get Calendar Events
+### ステップ1: カレンダーイベントの取得
 
 ```bash
 cd .claude && uv run today_cal/today-calendar.py --date "$TARGET_DATE"
 ```
 
-Parse calendar output to understand the target date's events and generate relevant questions.
+カレンダー出力を解析して対象日付のイベントを理解し、関連する質問を生成する。
 
-### Step 2: Find Target Date's Daily Note
+### ステップ2: 対象日付のデイリーノート検索
 
-- **IMPORTANT**: Current directory is `.claude/`, so you MUST specify `path=".."` when using Glob
-- Use bash command: `find ../01_Daily -name "${TARGET_DATE}.md" -type f` to find the target daily note
-- Alternative: Use Glob with `Glob(path="..", pattern="01_Daily/**/[TARGET_DATE].md")`
-- The file should be in `01_Daily/YYYY/MM/[TARGET_DATE].md` format
-- Read the file to understand current content structure
+- 重要: 現在のディレクトリは`.claude/`なので、Globを使用する際は`path=".."`を指定する必要がある
+- bashコマンド`find ../01_Daily -name "${TARGET_DATE}.md" -type f`を使用して対象のデイリーノートを検索
+- または`Glob(path="..", pattern="01_Daily/**/[TARGET_DATE].md")`を使用
+- ファイルは`01_Daily/YYYY/MM/[TARGET_DATE].md`形式である必要がある
+- ファイルを読み込んで現在のコンテンツ構造を理解
 
-### Step 3: Ask User Questions with Calendar Context (AskUserQuestionツールを使用)
+### ステップ3: カレンダーコンテキストを使用したユーザーへの質問（AskUserQuestionツールを使用）
 
-First, analyze the Google Calendar events and match them to projects. Then use the AskUserQuestion tool to ask questions in checkbox format.
+まず、Google Calendarのイベントを分析してプロジェクトに対応付ける。次にAskUserQuestionツールを使用してチェックボックス形式で質問を行う。
 
-**IMPORTANT**: Use the AskUserQuestion tool for all questions below. This provides an interactive checkbox/selection interface.
+重要: 以下のすべての質問にAskUserQuestionツールを使用する。これにより、インタラクティブなチェックボックス・選択インターフェースが提供される。
 
 ステータス番号: 1=未着手, 2=進行中, 3=レビュー中, 4=完了, 5=中止
 
 #### 質問パターン（プロジェクトごと）
 
-IMPORTANT: For each project, use a SINGLE AskUserQuestion call with multiple questions (up to 4). This creates a tabbed interface where users can switch between questions.
+重要: 各プロジェクトについて、複数の質問（最大4つ）を含む単一のAskUserQuestion呼び出しを使用する。これにより、ユーザーが質問を切り替えられるタブ付きインターフェースが作成される。
 
-For each project (PROJECT_A, PROJECT_B, PROJECT_C, ブログ・その他):
+各プロジェクト（PROJECT_A、PROJECT_B、PROJECT_C、ブログ・その他）について
 
-1. Before asking questions, output text message showing Google Calendar events for this project
-2. Collect all tasks in the project from the daily note
-3. SKIP tasks that are "未定" (not yet determined) - do not ask about their status
-4. Create one question per task (max 3 tasks to leave room for additional task question)
-5. Add one final question asking about additional tasks
-6. If ALL tasks are "未定", only ask the additional tasks question
-7. Send all questions in ONE AskUserQuestion call
+1. 質問を行う前に、このプロジェクトのGoogle Calendarイベントを示すテキストメッセージを出力
+2. デイリーノートからプロジェクト内のすべてのタスクを収集
+3. 「未定」のタスクはスキップする - ステータスを尋ねない
+4. タスクごとに1つの質問を作成（追加タスク質問のためのスペースを残すため最大3タスク）
+5. 追加タスクについて尋ねる最後の質問を追加
+6. すべてのタスクが「未定」の場合、追加タスクの質問のみを行う
+7. すべての質問を1回のAskUserQuestion呼び出しで送信
 
-First, output a text message like:
+まず、次のようなテキストメッセージを出力する
 
 ```text
 ## {PROJECT_NAME}のタスク進捗
 
-Google Calendar予定:
+Google Calendar予定
 - [event 1]
 - [event 2]
 ```
 
-Then ask questions:
+Then ask questions
 
-Task status question format (for each task in the project):
+タスクステータス質問フォーマット（プロジェクト内の各タスクについて）
 
 ```text
 タスク「[タスク内容]」の状態を教えてください。
@@ -107,16 +107,16 @@ header: "タスク[N]" (e.g., "タスク1", "タスク2", etc.)
 
 multiSelect: false
 
-options for task status:
+タスクステータスのオプション
 
 - label: "未着手", description: "タスクにまだ着手していない"
 - label: "進行中", description: "タスクを進行中"
 - label: "レビュー中", description: "タスクがレビュー待ち"
 - label: "完了", description: "タスクが完了"
 
-For cancelled tasks (中止), user can input via "Other" field.
+中止したタスクについては、ユーザーは「Other」フィールドから入力できる。
 
-Additional tasks question format (final question in the project):
+追加タスク質問フォーマット（プロジェクトの最後の質問）
 
 ```text
 {PROJECT_NAME}で追加でやったタスクがあれば「Other」で入力してください。なければ「なし」を選択してください。
@@ -126,74 +126,74 @@ header: "追加タスク"
 
 multiSelect: false
 
-options (minimum 2 required):
+オプション（最低2つ必要）
 
 - label: "なし", description: "追加タスクはありません"
 - label: "入力する", description: "Otherで追加タスクを入力します"
 
-Note: User can input additional tasks via "Other" field.
+注: ユーザーは「Other」フィールドから追加タスクを入力できる。
 
-Example: If PROJECT_A has 2 tasks, send ONE AskUserQuestion call with 3 questions (task1, task2, additional tasks) that appear as tabs.
+例: PROJECT_Aに2つのタスクがある場合、タブとして表示される3つの質問（タスク1、タスク2、追加タスク）を含む1回のAskUserQuestion呼び出しを送信する。
 
 #### 質問1: PROJECT_Aのタスク進捗
 
-Use AskUserQuestion tool for each task in PROJECT_A section
+PROJECT_Aセクションの各タスクについてAskUserQuestionツールを使用
 
 #### 質問2: PROJECT_Bのタスク進捗
 
-Use AskUserQuestion tool for each task in PROJECT_B section
+PROJECT_Bセクションの各タスクについてAskUserQuestionツールを使用
 
 #### 質問3: PROJECT_Cのタスク進捗
 
-Use AskUserQuestion tool for each task in PROJECT_C section
+PROJECT_Cセクションの各タスクについてAskUserQuestionツールを使用
 
 #### 質問4: ブログ・その他のタスク進捗
 
-Use AskUserQuestion tool for each task in ブログ and その他 sections
+ブログとその他セクションの各タスクについてAskUserQuestionツールを使用
 
 #### 質問5: 今日の振り返り（目標に沿った振り返り）
 
-Do NOT use AskUserQuestion tool for reflection. Instead, output a text message asking for reflection:
+振り返りにはAskUserQuestionツールを使用しない。代わりに、振り返りを求めるテキストメッセージを出力する
 
+```text
+今日1日を設定した目標に沿って振り返ってください（該当する観点があれば教えてください）
+
+- {GOAL_1}に関連する振り返り
+- {GOAL_2}に関連する振り返り
+- {GOAL_3}に関連する振り返り
 ```
-今日1日を設定した目標に沿って振り返ってください（該当する観点があれば教えてください）:
 
-- [目標1に関連する振り返り]
-- [目標2に関連する振り返り]
-- [目標3に関連する振り返り]
-```
+ユーザーのテキスト回答を待つ。ユーザーは振り返りたい各カテゴリについて自由形式のテキスト回答を提供できる。
 
-Wait for user's text response. User can provide free-form text answers for each category they want to reflect on.
+### ステップ4: デイリーノートファイルの更新
 
-### Step 4: Update Daily Note File
+すべての回答を収集した後、デイリーノートファイルを更新する
 
-After collecting all responses, update the daily note file:
+1. `01_Daily/YYYY/MM/[TARGET_DATE].md`ファイルを読み込む
+2. MTG・イベントセクションを更新
+    - すべてのGoogle Calendarイベントを`- [x]`（参加）としてマーク
+    - デイリーノートには存在するがGoogle Calendarにないイベントは打ち消し線でマーク: `- [ ] ~~イベント名~~ (実施せず)`
+3. 今日のTodoセクションを更新
+    - 完了した項目を`- [x]`としてマーク
+    - 進行中の項目を`- [/]`として更新
+    - レビュー中の項目を`- [R]`としてマーク
+    - 中止した項目を`- [-]`としてマーク
+    - 未着手の項目は`- [ ]`のまま保持
+    - 進捗詳細を更新（例: 「実装進める」→「実装80%完了、動作検証に移行」）
+4. 今日の振り返りセクションを更新
+    - 感謝: ユーザーの回答を箇条書きで追加
+    - Good: ユーザーの回答を箇条書きで追加
+    - Motto: ユーザーの回答を追加
+5. 明日やるセクションを更新
+    - 「今日のTodo」セクションから完了していないタスク（状態が[x]でないもの）を自動抽出
+    - 以下のステータスのタスクを含める: [ ] 未着手, [/] 進行中, [R] レビュー中
+    - 以下のステータスのタスクを除外: [x] 完了, [-] 中止
+    - これらのタスクを「明日やる」セクションにコピーし、すべてのチェックボックスを[ ]にリセット
+    - プロジェクトに残りタスクがない場合、「[ ] 未定」に設定
 
-1. Read `01_Daily/YYYY/MM/[TARGET_DATE].md` file
-2. Update MTG・イベント section:
-    - Mark ALL Google Calendar events as `- [x]` (attended)
-    - For events that exist in daily note but NOT in Google Calendar, mark with strikethrough: `- [ ] ~~event name~~ (実施せず)`
-3. Update 今日のTodo section:
-    - Mark completed items as `- [x]`
-    - Update in-progress items as `- [/]`
-    - Mark items under review as `- [R]`
-    - Mark cancelled items as `- [-]`
-    - Keep pending items as `- [ ]`
-    - Update progress details (e.g., "実装進める" → "実装80%完了、動作検証に移行")
-4. Update 今日の振り返り section:
-    - 感謝: Add user responses as bullet points
-    - Good: Add user responses as bullet points
-    - Motto: Add user responses
-5. Update 明日やる section:
-    - Automatically extract tasks from "今日のTodo" section that are NOT completed (状態が [x] でないもの)
-    - Include tasks with status: [ ] 未着手, [/] 進行中, [R] レビュー中
-    - Exclude tasks with status: [x] 完了, [-] 中止
-    - Copy these tasks to "明日やる" section, resetting all checkboxes to [ ]
-    - If a project has no remaining tasks, set it to "[ ] 未定"
+すべてのステップを実行し、ただちにファイルを更新すること。
 
-**Execute all steps and update the file immediately.**
-
-更新例：
+更新例
 
 ```markdown
 ## MTG・イベント
@@ -221,15 +221,15 @@ After collecting all responses, update the daily note file:
 
 ## 今日の振り返り
 
-### [目標1]
+### {GOAL_1}
 
 - [ユーザーの回答内容]
 
-### [目標2]
+### {GOAL_2}
 
 - [ユーザーの回答内容]
 
-### [目標3]
+### {GOAL_3}
 
 - [ユーザーの回答内容]
 

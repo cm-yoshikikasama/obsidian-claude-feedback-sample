@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(git:*), Read, Grep, Glob, LS
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Read, Grep, Glob, LS
 description: Generate commit message from git diff
 argument-hint: none
 ---
@@ -30,25 +30,23 @@ Review recent commit messages to understand the repository's commit message styl
 
 ### Step 3: Generate Commit Message
 
-Analyze all changes and generate a commit message following these guidelines:
+Analyze all changes and generate a commit message following these guidelines
 
 #### Commit Message Requirements
 
-Generate a commit message that:
+Generate a commit message that
 
-1. **Format**: Follow conventional commit format or repository style
-    - Type: feat, fix, docs, style, refactor, test, chore, etc.
-    - Scope (optional): component or file affected
-    - Description: concise summary of changes
-
-2. **Content Analysis**:
+1. Format - Follow conventional commit format or repository style
+    - Type - feat, fix, docs, style, refactor, test, chore, etc.
+    - Scope (optional) - component or file affected
+    - Description - concise summary of changes
+1. Content Analysis
     - Identify the primary purpose of changes
     - Group related changes logically
     - Focus on "why" rather than "what" when possible
+1. Message Structure
 
-3. **Message Structure**:
-
-    ```
+    ```text
     <type>(<scope>): <subject>
 
     <body (optional)>
@@ -56,13 +54,12 @@ Generate a commit message that:
     <footer (optional)>
     ```
 
-4. **Examples**:
+1. Examples
     - `feat(auth): add OAuth2 login support`
     - `fix(api): resolve timeout issue in data fetching`
     - `docs: update README with installation instructions`
     - `refactor(utils): simplify date formatting logic`
-
-5. **Best Practices**:
+1. Best Practices
     - Use imperative mood ("add" not "added")
     - Keep subject line under 50 characters
     - Capitalize first letter of subject
@@ -73,10 +70,10 @@ Generate a commit message that:
 
 ### Step 4: Output
 
-Display the generated commit message in a code block for easy copying:
+Display the generated commit message in a code block for easy copying
 
-```
+```text
 <generated commit message>
 ```
 
-**Important: Analyze all staged and unstaged changes before generating the message.**
+Important - Analyze all staged and unstaged changes before generating the message.

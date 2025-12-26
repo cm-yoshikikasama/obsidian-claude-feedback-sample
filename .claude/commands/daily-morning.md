@@ -1,18 +1,18 @@
 ---
-allowed-tools: Bash(cd:*), Bash(source:*), Bash(date:*), Bash(TZ=*), Bash(uv:*), Bash(TARGET_DATE=*), Write, Read, Glob, LS
+allowed-tools: Bash(cd:*), Bash(date:*), Bash(TZ=:*), Bash(uv:*), Bash(find:*), Write, Read, Glob, LS
 argument-hint: [YYYY-MM-DD]
-description: Create daily note from calendar events and previous tasks (optional: specific date)
+description: カレンダーイベントと前日のタスクからデイリーノートを作成（オプション: 特定の日付）
 ---
 
-# Daily Note Morning Assistant（朝用・作成）
+# デイリーノート朝用アシスタント（作成）
 
-## Date Handling
+## 日付の扱い
 
-- If date argument ($1) is provided in YYYY-MM-DD format, use that date
-- If no argument provided, use today's date (JST)
-- Target date: ${TARGET_DATE}
+- date引数（$1）がYYYY-MM-DD形式で指定された場合、その日付を使用
+- 引数が指定されない場合、今日の日付（JST）を使用
+- 対象日付: ${TARGET_DATE}
 
-## Project Configuration
+## プロジェクト設定
 
 ```txt
 PROJECT_A = "Aプロジェクト"
@@ -20,44 +20,52 @@ PROJECT_B = "Bプロジェクト"
 PROJECT_C = "Cプロジェクト"
 ```
 
-## Your task
+## 目標設定
 
-1. Determine target date from argument or use today
-2. Get Google Calendar events and add to MTG・イベント section
-3. Get previous day's todo from latest daily note
-4. Create target date's daily note file
+```txt
+GOAL_1 = "技術力の向上"
+GOAL_2 = "プロジェクト管理能力の強化"
+GOAL_3 = "コミュニケーション能力の向上"
+```
 
-### Step 0: Determine Target Date
+## タスク
+
+1. 引数から対象日付を決定、または今日の日付を使用
+2. Google Calendarのイベントを取得しMTG・イベントセクションに追加
+3. 最新のデイリーノートから前日のtodoを取得
+4. 対象日付のデイリーノートファイルを作成
+
+### ステップ0: 対象日付の決定
 
 ```bash
 TARGET_DATE="$1"
 if [ -z "$TARGET_DATE" ]; then
-  # Explicitly use JST timezone
+  # 明示的にJSTタイムゾーンを使用
   TARGET_DATE=$(TZ=Asia/Tokyo date +%Y-%m-%d)
 fi
 echo "Creating daily note for: $TARGET_DATE"
 ```
 
-### Step 1: Get Calendar Events
+### ステップ1: カレンダーイベントの取得
 
 ```bash
 cd .claude && uv run today_cal/today-calendar.py --date "$TARGET_DATE"
 ```
 
-Parse calendar output and convert each event to checkbox format for MTG・イベント section.
+カレンダー出力を解析し、各イベントをMTG・イベントセクション用のチェックボックス形式に変換する。
 
-### Step 2: Get Previous Tasks
+### ステップ2: 前日のタスク取得
 
-- **IMPORTANT**: Current directory is `.claude/`, so you MUST use bash to find daily notes from parent directory
-- Use bash command: `find ../01_Daily -name "*.md" -type f | sort -r | head -1` to get the most recent daily note file
-- If Glob tool is used, you MUST specify `path=".."` parameter explicitly: `Glob(path="..", pattern="01_Daily/**/*.md")`
-- Read the latest daily note and extract "明日やる" section content
-- Note: Tasks use these statuses: [ ] 未着手, [/] 進行中, [R] レビュー中, [x] 完了, [-] 中止
-- Use the extracted tasks directly without asking the user for confirmation
+- 重要: 現在のディレクトリは`.claude/`なので、親ディレクトリからデイリーノートを検索するためにbashを使用する必要がある
+- bashコマンド`find ../01_Daily -name "*.md" -type f | sort -r | head -1`を使用して最新のデイリーノートファイルを取得
+- Globツールを使用する場合、`path=".."`パラメータを明示的に指定する必要がある: `Glob(path="..", pattern="01_Daily/**/*.md")`
+- 最新のデイリーノートを読み込み「明日やる」セクションの内容を抽出
+- 注: タスクは以下のステータスを使用: [ ] 未着手, [/] 進行中, [R] レビュー中, [x] 完了, [-] 中止
+- 抽出したタスクをユーザーに確認せずに直接使用
 
-### Step 3: Create Daily Note
+### ステップ3: デイリーノート作成
 
-Create `01_Daily/YYYY/MM/[TARGET_DATE].md`:
+`01_Daily/YYYY/MM/[TARGET_DATE].md`を作成する
 
 ```markdown
 ---
@@ -91,15 +99,15 @@ tags:
 
 ## 今日の振り返り
 
-### [目標1]
+### {GOAL_1}
 
 -
 
-### [目標2]
+### {GOAL_2}
 
 -
 
-### [目標3]
+### {GOAL_3}
 
 -
 
@@ -117,4 +125,4 @@ tags:
     - [ ] 未定
 ```
 
-**Execute all steps and create the file immediately.**
+すべてのステップを実行し、ただちにファイルを作成すること。

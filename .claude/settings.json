@@ -2,31 +2,37 @@
   "env": {
     "TF_LOG": "WARN",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
-    "BASH_DEFAULT_TIMEOUT_MS": "600000"
+    "BASH_DEFAULT_TIMEOUT_MS": "600000",
+		"CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+
   },
   "permissions": {
     "allow": [
-      "Bash(ls ./)",
-      "Bash(ls ./*)",
-      "Bash(cat ./*)",
-      "Bash(grep)",
-      "Bash(rg)",
-      "Bash(find ./)",
-      "Bash(tree ./)",
-      "Bash(head ./*)",
-      "Bash(tail ./*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
       "Bash(echo:*)",
       "Bash(pwd)",
-      "Bash(cd ./)",
-      "Bash(mkdir ./)",
-      "Bash(cp ./* ./)",
-      "Bash(mv ./* ./)",
-      "Bash(touch ./)",
+      "Bash(cd:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(touch:*)",
       "Bash(which:*)",
       "Bash(env)",
       "Bash(whoami)",
       "Bash(date:*)",
       "Bash(TZ=:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(uv:*)",
+      "Bash(pnpm:*)",
       "Read(./**)",
       "Edit(./**)",
       "Grep(./**)",
@@ -37,17 +43,12 @@
       "MultiEdit(./**)",
       "TodoRead(**)",
       "TodoWrite(**)",
-      "Task(**)",
-      "Bash(cp:*)",
-      "Bash(uv run:*)"
+      "Task(**)"
     ],
     "deny": [
-      "Bash(rm -rf:*)",
-      "Bash(rm /*)",
-      "Bash(cp /*)",
-      "Bash(mv /*)",
-      "Bash(mkdir /*)",
-      "Bash(sudo:*)"
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
+      "Bash(npm:*)"
     ]
   },
   "enabledMcpjsonServers": [
