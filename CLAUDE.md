@@ -12,7 +12,7 @@ This is a personal Obsidian vault containing organized markdown notes in Japanes
 
 - 00_Configs/ - Configuration files and templates (Extra/, Templates/)
 - 01_Daily/ - Daily notes and logs
-- 02_Weekly/ - Weekly summaries and AI reviews
+- 02_Monthly/ - Monthly summaries and reviews
 - 03_RoughNotes/ - Temporary notes and rough materials
 - 04_EngStudy/ - English study materials and lesson feedback
 - 05_Meetings/ - Meeting notes and minutes
@@ -69,7 +69,7 @@ The project includes several slash commands in `.claude/commands/`
 - `/english-lesson [date]` - Generate English lesson feedback from audio transcription
 - `/meeting-minutes [date]` - Generate meeting minutes from audio transcription
 - `/commit-message` - Generate Git commit messages from staged changes
-- `/weekly-review [monday-date]` - Generate weekly summaries and AI reviews
+- `/monthly-review [YYYY-MM] [YYYY-MM]` - Generate monthly or range-based fact-based summaries (required argument)
 
 ## Architecture Details
 
@@ -96,7 +96,8 @@ Status System
 - `[/]` 進行中 (In progress)
 - `[R]` レビュー中 (Under review)
 - `[x]` 完了 (Completed)
-- `[-]` 中止 (Cancelled/Postponed)
+
+Cancelled/postponed tasks are shown with strikethrough (~~task name~~).
 
 ### Audio Transcription Pipeline
 
