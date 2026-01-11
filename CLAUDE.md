@@ -20,7 +20,7 @@ This is a personal Obsidian vault containing organized markdown notes in Japanes
 
 ### 2. Audio/Video Transcription Tool
 
-Located in `audio_video_to_text/`, this Python tool uses Google Vertex AI's Gemini model to transcribe MP3 audio and MP4 video files to text.
+Located in `.claude/skills/scripts/audio_video_to_text/`, this Python tool uses Google Vertex AI's Gemini model to transcribe MP3 audio and MP4 video files to text.
 
 ### 3. Markdown Formatting System
 
@@ -41,35 +41,35 @@ npm run format
 
 ```bash
 # Setup and run from project root using uv
-cd .claude
-uv run audio_video_to_text/audio_video_to_text.py
+cd .claude/skills/scripts/audio_video_to_text
+uv run audio_video_to_text.py
 
 # Alternative: Traditional setup (if needed)
-cd .claude
+cd .claude/skills/scripts/audio_video_to_text
 uv venv --python 3.13
 source .venv/bin/activate  # macOS/Linux
 uv pip install -r requirements.txt
-python audio_video_to_text/audio_video_to_text.py
+python audio_video_to_text.py
 ```
 
 ### Google Calendar Integration
 
 ```bash
 # Get today's calendar events
-cd .claude
-uv run today_cal/today-calendar.py
+cd .claude/skills/scripts/today_calendar
+uv run today-calendar.py
 ```
 
-### Custom Slash Commands
+### Custom Skills (Slash Commands)
 
-The project includes several slash commands in `.claude/commands/`
+The project includes several skills in `.claude/skills/`
 
-- `/daily-morning [date]` - Create morning daily note with calendar events and previous day's tasks
-- `/daily-evening [date]` - Update evening daily note with reflections and tomorrow's planning
-- `/english-lesson [date]` - Generate English lesson feedback from audio transcription
-- `/meeting-minutes [date]` - Generate meeting minutes from audio transcription
-- `/commit-message` - Generate Git commit messages from staged changes
-- `/monthly-review [YYYY-MM] [YYYY-MM]` - Generate monthly or range-based fact-based summaries (required argument)
+- `/daily-morning [YYYY-MM-DD]` - Create morning daily note with calendar events and previous day's tasks
+- `/daily-evening [YYYY-MM-DD]` - Update evening daily note with reflections and tomorrow's planning
+- `/english-lesson [YYYY-MM-DD]` - Generate English lesson feedback from audio transcription
+- `/meeting-minutes [YYYY-MM-DD] [会議名]` - Generate meeting minutes from audio transcription
+- `/commit-msg` - Generate Git commit messages from staged changes
+- `/monthly-review [YYYY-MM]` - Generate monthly KPT-based fact summaries
 
 ## Architecture Details
 
@@ -101,11 +101,11 @@ Cancelled/postponed tasks are shown with strikethrough (~~task name~~).
 
 ### Audio Transcription Pipeline
 
-1. Place MP3/MP4 files in `audio_video_to_text/input/`
+1. Place MP3/MP4 files in `.claude/skills/scripts/audio_video_to_text/input/`
 2. Configure `.env` with GCP credentials and FILE_NAME
 3. Script automatically converts MP4 to MP3 if needed
 4. Uses Gemini model for transcription with speaker change detection
-5. Outputs formatted text to `audio_video_to_text/output/`
+5. Outputs formatted text to `.claude/skills/scripts/audio_video_to_text/output/`
 
 ## Important Configuration
 
@@ -141,7 +141,7 @@ Google Calendar integration
 
 ### Environment Setup
 
-Audio transcription requires `.env` file in `.claude/audio_video_to_text/`
+Audio transcription requires `.env` file in `.claude/skills/scripts/audio_video_to_text/`
 
 ```env
 PROJECT_ID=your-gcp-project-id
@@ -152,7 +152,7 @@ GOOGLE_APPLICATION_CREDENTIALS=path/to/service-account-key.json
 
 Google Calendar integration requires OAuth2 setup
 
-- `cal_client_secret.json` in `.claude/` directory
+- `cal_client_secret.json` in `.claude/skills/scripts/today_calendar/` directory
 - First run will create `token.json` automatically
 
 ## Working with This Repository

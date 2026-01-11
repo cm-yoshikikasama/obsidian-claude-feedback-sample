@@ -1,7 +1,8 @@
 ---
-allowed-tools: Bash(ls:*), Bash(cd:*), Bash(uv:*), Write, Read, Glob, LS
+name: meeting-minutes
 description: 音声文字起こしから議事録を生成
-argument-hint: YYYY-MM-DD
+allowed-tools: Bash(ls *), Bash(cd *), Bash(uv *), Write, Read, Glob, LS
+disable-model-invocation: true
 ---
 
 # 議事録生成
@@ -10,26 +11,39 @@ argument-hint: YYYY-MM-DD
 
 1. inputディレクトリの音声ファイルを確認し文字起こしを実行
 2. 最新の文字起こしファイルを読み込む
-3. 詳細な議事録を生成し04_Meetingsフォルダに保存
+3. 詳細な議事録を生成し05_Meetingsフォルダに保存
+
+### 引数
+
+`/meeting-minutes YYYY-MM-DD 会議名` の形式で日付と会議名を指定可能。
+
+- 引数あり → 指定された日付と会議名を使用
+- 引数なし → 実行日の日付を使用し、会議名はユーザーに確認
 
 ### ステップ1: 音声ファイル確認と文字起こし
 
 ```bash
-ls .claude/audio_video_to_text/input/
-cd .claude/audio_video_to_text && uv run audio_video_to_text.py
+ls .claude/skills/scripts/audio_video_to_text/input/
+cd .claude/skills/scripts/audio_video_to_text && uv run audio_video_to_text.py
 ```
 
 ### ステップ2: 最新の文字起こしファイル読み込み
 
 ```bash
-ls -la .claude/audio_video_to_text/output/
+ls -la .claude/skills/scripts/audio_video_to_text/output/
 ```
 
 outputディレクトリから最新の`*_transcript.txt`ファイルを見つけて読み込む。
 
+読み込み後、出力ファイルをクリーンアップする。
+
+```bash
+cd .claude/skills/scripts/audio_video_to_text && uv run audio_video_to_text.py --cleanup
+```
+
 ### ステップ3: 議事録生成
 
-文字起こし内容を分析し、詳細な議事録を日本語で生成する。`04_Meetings/$ARGUMENTS-[会議名].md`に保存。
+文字起こし内容を分析し、詳細な議事録を日本語で生成する。引数で指定された日付と会議名（または実行日と確認した会議名）を使用し、`05_Meetings/YYYY-MM-DD_会議名.md`に保存。
 
 重要: 分析前に必ず文字起こし内容を読み込むこと。すべての内容を日本語で生成すること。
 

@@ -1,7 +1,8 @@
 ---
-allowed-tools: Bash(cd:*), Bash(ls:*), Bash(find:*), Bash(uv:*), Write, Read, Glob, LS, Edit, MultiEdit
+name: english-lesson
 description: Generate English lesson feedback from audio transcription
-argument-hint: YYYY-MM-DD
+allowed-tools: Bash(cd *), Bash(ls *), Bash(find *), Bash(uv *), Write, Read, Glob, LS, Edit, MultiEdit
+disable-model-invocation: true
 ---
 
 # English Lesson Feedback Generator
@@ -11,22 +12,35 @@ argument-hint: YYYY-MM-DD
 1. Check and transcribe audio files from input directory
 2. Read the latest transcript file
 3. Load previous feedback for comparison
-4. Generate detailed feedback and save to 03_eng_study folder
+4. Generate detailed feedback and save to 04_EngStudy folder
+
+### Arguments
+
+`/english-lesson YYYY-MM-DD` format to specify the lesson date.
+
+- With argument → Use the specified date
+- Without argument → Use today's date
 
 ### Step 1: Check Audio Files and Transcribe
 
 ```bash
-ls .claude/audio_video_to_text/input/
-cd .claude/audio_video_to_text && uv run audio_video_to_text.py
+ls .claude/skills/scripts/audio_video_to_text/input/
+cd .claude/skills/scripts/audio_video_to_text && uv run audio_video_to_text.py
 ```
 
 ### Step 2: Read Latest Transcript
 
 ```bash
-ls -la .claude/audio_video_to_text/output/
+ls -la .claude/skills/scripts/audio_video_to_text/output/
 ```
 
 Find and read the latest `*_transcript.txt` file from output directory.
+
+After reading, cleanup output files.
+
+```bash
+cd .claude/skills/scripts/audio_video_to_text && uv run audio_video_to_text.py --cleanup
+```
 
 ### Step 3: Load Previous Feedback
 
@@ -37,7 +51,7 @@ Find and read the latest `*_transcript.txt` file from output directory.
 
 ### Step 4: Generate Feedback
 
-Analyze the lesson transcript and generate detailed feedback. Save to `03_eng_study/$ARGUMENTS-feedback.md`.
+Analyze the lesson transcript and generate detailed feedback. Use the specified date (or today's date if no argument) and save to `04_EngStudy/YYYY-MM-DD-feedback.md`.
 
 Important - Read transcript and previous feedback before analysis.
 
@@ -85,5 +99,11 @@ For grammar/expression improvements and long-term challenges, use this specific 
 
 - Expressions used appropriately
 - Improvements from previous sessions (if any)
+
+#### Progress Tracking
+
+- Comparison with previous feedback (specific improvements and recurring issues)
+- Improvement trajectory (what has gotten better over time)
+- Persistent challenges requiring continued focus
 
 Execute all steps and report the generated feedback file path to user.

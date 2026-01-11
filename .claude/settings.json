@@ -1,4 +1,5 @@
 {
+  "model": "opus",
   "env": {
     "TF_LOG": "WARN",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
@@ -8,31 +9,31 @@
   },
   "permissions": {
     "allow": [
-      "Bash(ls:*)",
-      "Bash(cat:*)",
-      "Bash(grep:*)",
-      "Bash(rg:*)",
-      "Bash(find:*)",
-      "Bash(tree:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
-      "Bash(echo:*)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(tree *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(echo *)",
       "Bash(pwd)",
-      "Bash(cd:*)",
-      "Bash(mkdir:*)",
-      "Bash(cp:*)",
-      "Bash(mv:*)",
-      "Bash(touch:*)",
-      "Bash(which:*)",
+      "Bash(cd *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(touch *)",
+      "Bash(which *)",
       "Bash(env)",
       "Bash(whoami)",
-      "Bash(date:*)",
-      "Bash(TZ=:*)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)",
-      "Bash(uv:*)",
-      "Bash(pnpm:*)",
+      "Bash(date *)",
+      "Bash(TZ=*)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(uv *)",
+      "Bash(pnpm *)",
       "Read(./**)",
       "Edit(./**)",
       "Grep(./**)",
@@ -46,14 +47,11 @@
       "Task(**)"
     ],
     "deny": [
-      "Bash(rm:*)",
-      "Bash(sudo:*)",
-      "Bash(npm:*)"
+      "Bash(rm *)",
+      "Bash(sudo *)",
+      "Bash(npm *)"
     ]
   },
-  "enabledMcpjsonServers": [
-  ],
-  "disabledMcpjsonServers": [],
   "hooks": {
     "PostToolUse": [
       {

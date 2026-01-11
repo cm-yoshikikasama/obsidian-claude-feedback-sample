@@ -1,7 +1,8 @@
 ---
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Read, Grep, Glob, LS
+name: commit-msg
 description: Generate commit message from git diff
-argument-hint: none
+allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Read, Grep, Glob, LS
+disable-model-invocation: true
 ---
 
 # Git Commit Message Generator
