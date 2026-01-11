@@ -1,0 +1,7 @@
+.env
+node_modules
+.obsidian
+.venv
+cal_client_secret.json
+token.json
+.DS_Store
