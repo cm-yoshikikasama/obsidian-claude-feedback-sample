@@ -1,5 +1,7 @@
 # 詳細手順
 
++すべてのコマンドはプロジェクトルート（obsidianディレクトリ）から実行すること。
+
 ## ステップ0: 対象日付の決定
 
 ```bash
@@ -20,8 +22,7 @@ cd .claude/skills/scripts/today_calendar && uv run today-calendar.py --date "$TA
 
 ## ステップ2: 対象日付のデイリーノート検索
 
-- bashコマンド`find ../01_Daily -name "${TARGET_DATE}.md" -type f`を使用
-- または`Glob(path="..", pattern="01_Daily/**/[TARGET_DATE].md")`を使用
+- bashコマンド`find 01_Daily -name "*.md" -type f | sort -r | head -1`を使用
 - ファイルは`01_Daily/YYYY/MM/[TARGET_DATE].md`形式
 
 ## ステップ3: ユーザーへの質問（AskUserQuestionツール使用）
