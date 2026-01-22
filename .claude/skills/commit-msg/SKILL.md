@@ -1,17 +1,19 @@
 ---
 name: commit-msg
-description: Generate commit message from git diff
+description: Generate commit message from git diff with security check
 allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Read, Grep, Glob, LS
 disable-model-invocation: true
 ---
 
-# Git Commit Message Generator
+# Git Add, Commit, Push Command Generator
 
 ## Your task
 
 1. Check git status and diff to understand changes
-2. Analyze the changes comprehensively
-3. Generate an appropriate commit message based on the changes
+2. Analyze recent commits for style reference
+3. Security check for confidential information
+4. Generate a single-line commit message
+5. Output 3 executable git commands (add, commit, push)
 
 ### Step 1: Check Git Status and Changes
 
@@ -27,54 +29,49 @@ git diff
 git log --oneline -10
 ```
 
-Review recent commit messages to understand the repository's commit message style and conventions.
+### Step 3: Security Check (IMPORTANT)
 
-### Step 3: Generate Commit Message
+Before generating commands, verify the diff does NOT contain:
 
-Analyze all changes and generate a commit message following these guidelines
+- Real project/client names (actual company names, project codes)
+- Personal information (real names, emails, phone numbers)
+- Credentials (API keys, passwords, tokens)
+- Internal URLs or IP addresses
+- Confidential business information
 
-#### Commit Message Requirements
+If any confidential information is found:
 
-Generate a commit message that
+1. List the specific items found
+2. DO NOT output git commands
+3. Ask user to remove confidential information first
 
-1. Format - Follow conventional commit format or repository style
-    - Type - feat, fix, docs, style, refactor, test, chore, etc.
-    - Scope (optional) - component or file affected
-    - Description - concise summary of changes
-1. Content Analysis
-    - Identify the primary purpose of changes
-    - Group related changes logically
-    - Focus on "why" rather than "what" when possible
-1. Message Structure
+### Step 4: Generate Single-Line Commit Message
 
-    ```text
-    <type>(<scope>): <subject>
+Generate a single-line commit message following these rules:
 
-    <body (optional)>
+1. Format: `<type>(<scope>): <description>`
+    - Type: feat, fix, docs, style, refactor, test, chore, etc.
+    - Scope (optional): component or file affected
+    - Description: concise summary of changes in English
 
-    <footer (optional)>
-    ```
-
-1. Examples
-    - `feat(auth): add OAuth2 login support`
-    - `fix(api): resolve timeout issue in data fetching`
-    - `docs: update README with installation instructions`
-    - `refactor(utils): simplify date formatting logic`
-1. Best Practices
+2. Best Practices:
     - Use imperative mood ("add" not "added")
-    - Keep subject line under 50 characters
-    - Capitalize first letter of subject
-    - No period at end of subject line
-    - Separate subject from body with blank line
-    - Wrap body at 72 characters
-    - Explain what and why vs. how in body
+    - Keep under 72 characters
+    - No period at end
+    - Focus on what changed
 
-### Step 4: Output
+### Step 5: Output Executable Commands
 
-Display the generated commit message in a code block for easy copying
+Only if security check passes, output exactly 3 lines of executable git commands:
 
-```text
-<generated commit message>
+```bash
+git add .
+git commit -m "<generated commit message>"
+git push
 ```
 
-Important - Analyze all staged and unstaged changes before generating the message.
+IMPORTANT:
+
+- Do NOT execute the commands
+- Only output the 3 command lines
+- User can copy and execute them manually

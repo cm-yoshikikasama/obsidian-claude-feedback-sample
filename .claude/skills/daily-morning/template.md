@@ -36,8 +36,6 @@ tags:
   [Previous day tasks from "明日やる" section]
 - {PROJECT_C}
   [Previous day tasks from "明日やる" section]
-- ブログ
-  [Previous day tasks from "明日やる" section]
 - その他
   [Previous day tasks from "明日やる" section]
 
@@ -55,6 +53,10 @@ tags:
 
 -
 
+## 日記
+
+-
+
 ## 明日やる
 
 - {PROJECT_A}
@@ -62,8 +64,6 @@ tags:
 - {PROJECT_B}
     - [ ] 未定
 - {PROJECT_C}
-    - [ ] 未定
-- ブログ
     - [ ] 未定
 - その他
     - [ ] 未定

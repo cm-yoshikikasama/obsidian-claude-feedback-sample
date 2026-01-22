@@ -20,8 +20,6 @@ tags:
     - [ ] placeholder
 - Cプロジェクト
     - [ ] placeholder
-- ブログ
-    - [ ] placeholder
 - その他
     - [ ] placeholder
 
@@ -39,6 +37,10 @@ tags:
 
 -
 
+## 日記
+
+-
+
 ## 明日やる
 
 - Aプロジェクト
@@ -46,8 +48,6 @@ tags:
 - Bプロジェクト
     - [ ] placeholder
 - Cプロジェクト
-    - [ ] placeholder
-- ブログ
     - [ ] placeholder
 - その他
     - [ ] placeholder
